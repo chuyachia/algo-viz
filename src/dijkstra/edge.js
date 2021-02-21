@@ -21,7 +21,7 @@ export function Edge(weight, from, to, vertexDiameter, p) {
     this.p.rotate(angle - this.p.HALF_PI);
     this.p.stroke(this.r, this.g, this.b);
     this.p.fill(this.p.color(255, 255, 255));
-    this.p.triangle(0, 10, 5, 20, -5, 20);
+    this.p.triangle(0, this.d / 2, this.d/ 4, this.d, -this.d/4, this.d);
     this.p.pop();
   }
 

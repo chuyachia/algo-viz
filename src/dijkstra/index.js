@@ -4,34 +4,44 @@ import { dijkstraSolver } from './dijkstra';
 export function sketch(p) {
   var n = 20;
   var vertices = [];
-  var radius = 100;
+  var radius = 200;
   var from;
   var weight = 1;
-  var vertexDiameter = 20;
+  var vertexDiameter = 30;
   var button;
+  var instructionArea;
   var mode = 0;
   var startVertex;
   var dSolver;
 
   p.setup = function () {
-    p.createCanvas(400, 400);
-    button = p.createButton('');
+    p.createCanvas(600, 600);
+    drawInstructionArea();
+    drawButton();
     drawGraph();
+  }
+
+  function drawButton() {
+    button = p.createButton('');
+  }
+
+  function drawInstructionArea() {
+    instructionArea = p.createElement('div');
   }
 
   function drawGraph() {
     let step = p.TWO_PI / n;
     let angle = 0;
     for (let i = 0;i < n;i++) {
-      let x = radius * p.cos(angle) + 200;
-      let y = radius * p.sin(angle) + 200;
+      let x = radius * p.cos(angle) + 300;
+      let y = radius * p.sin(angle) + 300;
       vertices.push(new Vertex(i, x, y, vertexDiameter, p));
       angle += step;
     }
   }
 
   p.draw = function () {
-    showButton();
+    changeInstructions();
     if (mode == 0) {
       drawNewEdge();
     } else if (mode == 1) {
@@ -48,23 +58,24 @@ export function sketch(p) {
     }
   }
 
-  function showButton() {
+  function changeInstructions() {
     switch (mode) {
       case 0:
-        button.html('Find shortest path');
+        instructionArea.html('Click on nodes to add link. Hold mouse pressed to increase link weight. Once the graph is done, click on button to find shortest paths.');
+        button.html('Find shortest paths');
+        instructionArea.show();
+        button.show();
         button.mousePressed(function () {
           mode = 1;
         });
         break;
       case 1:
-        button.html('Pick a start vertex and begin');
-        button.mousePressed(function () {
-          if (startVertex != null) {
-            dSolver = dijkstraSolver(startVertex, n);
-          }
-        });
+        instructionArea.html('Pick a start node to begin');
+        button.hide();
         break;
       case 2:
+        instructionArea.hide();
+        button.show();
         button.html('Short paths found. Restart');
         button.mousePressed(function () {
           reset();
@@ -109,6 +120,9 @@ export function sketch(p) {
   p.mouseClicked = function () {
     if (mode == 1 && startVertex == null) {
       chooseStartVertex();
+      if (startVertex != null) {
+        dSolver = dijkstraSolver(startVertex, n);
+      }
     }
   }
 

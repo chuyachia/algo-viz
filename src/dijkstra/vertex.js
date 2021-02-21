@@ -15,6 +15,7 @@ export function Vertex(id, x, y, diameter, p) {
     this.p.fill(this.p.color(this.r, this.b, this.g));
     this.p.circle(this.x, this.y, this.d);
     this.p.fill(this.p.color(0,0,0));
+    this.p.textAlign(this.p.CENTER);
     this.p.text(this.id, this.x, this.y);
     for (const [_, edge] of Object.entries(this.edges)) {
       edge.display();
