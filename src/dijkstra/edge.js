@@ -1,11 +1,23 @@
 export function Edge(weight, from, to, vertexDiameter, p) {
+  this.colors = {
+    SELECTED: {
+      r: 254,
+      g: 160,
+      b: 144,
+    },
+    DEFAULT: {
+      r: 154,
+      g: 160,
+      b: 167,
+    }
+  }
   this.weight = weight;
   this.from = from;
   this.to = to;
   this.d = vertexDiameter;
-  this.r = 0;
-  this.b = 0;
-  this.g = 0;
+  this.r = this.colors.DEFAULT.r;
+  this.b = this.colors.DEFAULT.b;
+  this.g = this.colors.DEFAULT.g;
   this.p = p;
 
   this.display = function() {
@@ -25,21 +37,9 @@ export function Edge(weight, from, to, vertexDiameter, p) {
     this.p.pop();
   }
 
-  this.changeToRed = function() {
-    this.r = 255;
-    this.g = 0;
-    this.b = 0;
-  }
-
-  this.changeToYellow = function() {
-    this.r = 255;
-    this.g = 255;
-    this.b = 0;
-  }
-
-  this.changeToBlack = function() {
-    this.r = 0;
-    this.g = 0;
-    this.b = 0;
+  this.changeColor = function(colorObject) {
+    this.r = colorObject.r;
+    this.g = colorObject.g;
+    this.b = colorObject.b;
   }
 }

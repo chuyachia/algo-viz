@@ -1,5 +1,5 @@
 import p5 from 'p5';
 
-import { sketch } from './dijkstra';
+import { dijkstraSketch } from './dijkstra';
 
-const dijkstra = new p5(sketch);
+const d = new p5(dijkstraSketch);

@@ -1,31 +1,53 @@
 import { Edge } from './edge';
 
 export function Vertex(id, x, y, diameter, p) {
+  this.colors = {
+    VISITING: {
+      r: 254,
+      g: 160,
+      b: 144,
+    },
+    REACHABLE: {
+      r: 89,
+      g: 199,
+      b: 235,
+    },
+    DEFAULT: {
+      r: 154,
+      g: 160,
+      b: 167,
+    }
+  }
   this.id = id;
   this.x = x;
   this.y = y;
   this.d = diameter;
-  this.r = 255;
-  this.b = 255;
-  this.g = 255;
+  this.r = this.colors.DEFAULT.r;
+  this.b = this.colors.DEFAULT.b;
+  this.g = this.colors.DEFAULT.g;
   this.edges = {};
   this.p = p;
+  this.minDist;
 
   this.display = function() {
+    this.p.push();
+    this.p.strokeWeight(0);
     this.p.fill(this.p.color(this.r, this.b, this.g));
     this.p.circle(this.x, this.y, this.d);
     this.p.fill(this.p.color(0,0,0));
     this.p.textAlign(this.p.CENTER);
-    this.p.text(this.id, this.x, this.y);
+    let minDist = this.minDist !== undefined? this.minDist.toFixed(2) : 'Inf';
+    this.p.text(this.id + " : " + minDist, this.x, this.y + this.d);
+    this.p.pop();
     for (const [_, edge] of Object.entries(this.edges)) {
       edge.display();
     }
   }
   
-  this.changeColor = function() {
-    this.r = this.p.random(255);
-    this.g = this.p.random(255);
-    this.b = this.p.random(255);
+  this.changeColor = function(colorObject) {
+    this.r = colorObject.r;
+    this.g = colorObject.g;
+    this.b = colorObject.b;
   }
 
   this.addEdge = function(vertex, weight) {
