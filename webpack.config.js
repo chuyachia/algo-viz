@@ -8,7 +8,7 @@ module.exports = (env) => ({
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Algorithm Visualizer',
+      template: './src/assets/index.html'
     }),
 
   ],
@@ -18,6 +18,14 @@ module.exports = (env) => ({
   },
   devServer: {
     contentBase: './dist',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      }
+    ]
   },
   optimization: {
     splitChunks: {

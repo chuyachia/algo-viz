@@ -1,0 +1,23 @@
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+header {
+  flex: 1 1 100%;
+  text-align: center;
+}
+
+#p5-container {
+  position: relative;
+  flex: 1 1 auto;
+}
+
+#side-bar {
+  flex: 0 1 15%;
+}
+
+#side-bar h5.active::before{
+  content: '* ';
+}

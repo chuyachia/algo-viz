@@ -23,7 +23,7 @@ export function dijkstraSketch(p) {
 
   function drawButton() {
     button = p.createButton('');
-    button.position(10, 50);
+    button.position(10, 40);
   }
 
   function drawGraph() {
@@ -132,8 +132,8 @@ export function dijkstraSketch(p) {
     chooseStartVertex();
     if (startVertex != null) {
       dSolver = dijkstraSolver(startVertex, n);
+      mode = 2;
     }
-    mode = 2;
   }
 
   function getClosestVertex() {

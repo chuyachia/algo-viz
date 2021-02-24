@@ -1,3 +1,4 @@
+import { BLUE, GREY, RED } from '../../util/colors';
 import { PriorityQueue } from '../../util/priorityQueue';
 
 export function* dijkstraSolver(startVertex, n) {
@@ -14,8 +15,8 @@ export function* dijkstraSolver(startVertex, n) {
     let [currentWeight, currentEdge] = pq.poll();
     let fromVertex = currentEdge.from;
     let currentVertex = currentEdge.to;
-    fromVertex.changeColor(fromVertex.colors.VISITING);
-    currentVertex.changeColor(currentVertex.colors.VISITING);
+    fromVertex.changeColor(RED);
+    currentVertex.changeColor(RED);
 
     let frameCount = 0;
     while (frameCount < 50) {
@@ -30,15 +31,15 @@ export function* dijkstraSolver(startVertex, n) {
       console.info("New shortest distance found");
       dist[currentVertex.id] = currentWeight;
       currentVertex.value = currentWeight;
-      currentEdge.changeColor(currentEdge.colors.SELECTED);
+      currentEdge.changeColor(RED);
       for (const [_, nextEdge] of Object.entries(currentVertex.edges)) {
         pq.add([currentWeight + nextEdge.weight, nextEdge]);
       }
     } else {
-      currentEdge.changeColor(currentEdge.colors.DEFAULT);
+      currentEdge.changeColor(GREY);
     }
-    fromVertex.changeColor(fromVertex.colors.REACHABLE);
-    currentVertex.changeColor(currentVertex.colors.REACHABLE);
+    fromVertex.changeColor(BLUE);
+    currentVertex.changeColor(BLUE);
 
 
     frameCount = 0;

@@ -1,23 +1,13 @@
+import { GREY } from "../../util/colors";
+
 export function Edge(weight, from, to, vertexDiameter, p) {
-  this.colors = {
-    SELECTED: {
-      r: 254,
-      g: 160,
-      b: 144,
-    },
-    DEFAULT: {
-      r: 154,
-      g: 160,
-      b: 167,
-    }
-  }
   this.weight = weight;
   this.from = from;
   this.to = to;
   this.d = vertexDiameter;
-  this.r = this.colors.DEFAULT.r;
-  this.b = this.colors.DEFAULT.b;
-  this.g = this.colors.DEFAULT.g;
+  this.r = GREY.r;
+  this.b = GREY.b;
+  this.g = GREY.g;
   this.p = p;
 
   this.display = function() {

@@ -22,7 +22,7 @@ export function topologicalSortSketch(p) {
 
   function drawButton() {
     button = p.createButton('');
-    button.position(10, 50);
+    button.position(10, 40);
   }
 
   function drawGraph() {

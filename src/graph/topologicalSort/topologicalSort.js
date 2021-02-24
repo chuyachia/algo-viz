@@ -1,3 +1,4 @@
+import { BLUE, GREY, RED } from "../../util/colors";
 import { LinkedList } from "../../util/linkedList";
 
 export function* topologicalSort(vertices) {
@@ -29,7 +30,7 @@ export function* topologicalSort(vertices) {
       while (backtrack.size() > 0 && visit.peek().seq != backtrack.peek().seq ) {
         let backTrackV = backtrack.poll().vertex;
         state[backTrackV.id] = VISITED;
-        backTrackV.changeColor(backTrackV.colors.DEFAULT);
+        backTrackV.changeColor(GREY);
         backTrackV.value = sortedIndex;
         sorted[--sortedIndex] = backTrackV.id;
         frameCount = 0;
@@ -42,7 +43,7 @@ export function* topologicalSort(vertices) {
       let current = visit.poll().vertex;
 
       state[current.id] = VISITING;
-      current.changeColor(current.colors.VISITING);
+      current.changeColor(RED);
 
       for (const [_, edge] of Object.entries(current.edges)) {
         let next = edge.to;
@@ -55,7 +56,7 @@ export function* topologicalSort(vertices) {
           break;
         }
   
-        next.changeColor(next.colors.REACHABLE);
+        next.changeColor(BLUE);
         visit.addFirst({seq, vertex: next});
         backtrack.addFirst({seq, vertex: next});
         seq++;
@@ -71,7 +72,7 @@ export function* topologicalSort(vertices) {
     while (backtrack.size() > 0) {
       let backTrackV = backtrack.poll().vertex;
       state[backTrackV.id] = VISITED;
-      backTrackV.changeColor(backTrackV.colors.DEFAULT);
+      backTrackV.changeColor(GREY);
       backTrackV.value = sortedIndex;
       sorted[--sortedIndex] = backTrackV.id;
       frameCount = 0;

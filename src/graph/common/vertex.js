@@ -1,30 +1,14 @@
+import { GREY } from '../../util/colors';
 import { Edge } from './edge';
 
 export function Vertex(id, x, y, diameter, p, getDisplayValue) {
-  this.colors = {
-    VISITING: {
-      r: 254,
-      g: 160,
-      b: 144,
-    },
-    REACHABLE: {
-      r: 89,
-      g: 199,
-      b: 235,
-    },
-    DEFAULT: {
-      r: 154,
-      g: 160,
-      b: 167,
-    }
-  }
   this.id = id;
   this.x = x;
   this.y = y;
   this.d = diameter;
-  this.r = this.colors.DEFAULT.r;
-  this.b = this.colors.DEFAULT.b;
-  this.g = this.colors.DEFAULT.g;
+  this.r = GREY.r;
+  this.b = GREY.b;
+  this.g = GREY.g;
   this.edges = {};
   this.p = p;
   this.getDisplayValue = getDisplayValue;
