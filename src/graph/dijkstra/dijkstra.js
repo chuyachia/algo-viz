@@ -1,9 +1,9 @@
-import { PriorityQueue } from '../common/priorityQueue';
+import { PriorityQueue } from '../../util/priorityQueue';
 
 export function* dijkstraSolver(startVertex, n) {
   const dist = new Array(n);
   dist[startVertex.id] = 0;
-  startVertex.minDist = 0;
+  startVertex.value = 0;
   const pq = new PriorityQueue((p1, p2) => p1[0] - p2[0]);
 
   for (const [_, edge] of Object.entries(startVertex.edges)) {
@@ -29,7 +29,7 @@ export function* dijkstraSolver(startVertex, n) {
     if (dist[currentVertex.id] == undefined || currentWeight < dist[currentVertex.id]) {
       console.info("New shortest distance found");
       dist[currentVertex.id] = currentWeight;
-      currentVertex.minDist = currentWeight;
+      currentVertex.value = currentWeight;
       currentEdge.changeColor(currentEdge.colors.SELECTED);
       for (const [_, nextEdge] of Object.entries(currentVertex.edges)) {
         pq.add([currentWeight + nextEdge.weight, nextEdge]);

@@ -1,6 +1,6 @@
 import { Edge } from './edge';
 
-export function Vertex(id, x, y, diameter, p) {
+export function Vertex(id, x, y, diameter, p, getDisplayValue) {
   this.colors = {
     VISITING: {
       r: 254,
@@ -27,7 +27,8 @@ export function Vertex(id, x, y, diameter, p) {
   this.g = this.colors.DEFAULT.g;
   this.edges = {};
   this.p = p;
-  this.minDist;
+  this.getDisplayValue = getDisplayValue;
+  this.value;
 
   this.display = function() {
     this.p.push();
@@ -36,8 +37,8 @@ export function Vertex(id, x, y, diameter, p) {
     this.p.circle(this.x, this.y, this.d);
     this.p.fill(this.p.color(0,0,0));
     this.p.textAlign(this.p.CENTER);
-    let minDist = this.minDist !== undefined? this.minDist.toFixed(2) : 'Inf';
-    this.p.text(this.id + " : " + minDist, this.x, this.y + this.d);
+    let displayValue = this.getDisplayValue? this.getDisplayValue(this.value) : this.value;
+    this.p.text(this.id + " : " + displayValue, this.x, this.y + this.d);
     this.p.pop();
     for (const [_, edge] of Object.entries(this.edges)) {
       edge.display();

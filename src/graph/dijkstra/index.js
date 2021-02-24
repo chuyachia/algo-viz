@@ -1,4 +1,4 @@
-import { Vertex } from './vertex';
+import { Vertex } from '../common/vertex';
 import { dijkstraSolver } from './dijkstra';
 
 export function dijkstraSketch(p) {
@@ -18,9 +18,7 @@ export function dijkstraSketch(p) {
   p.setup = function () {
     p.createCanvas(canvasWidth, canvasHeight);
     drawButton();
-
     drawGraph();
-    p.fill(0, 0, 0);
   }
 
   function drawButton() {
@@ -34,15 +32,20 @@ export function dijkstraSketch(p) {
     for (let i = 0;i < n;i++) {
       let x = radius * p.cos(angle) + canvasWidth/2;
       let y = radius * p.sin(angle) + canvasHeight/2;
-      vertices.push(new Vertex(i, x, y, vertexDiameter, p));
+      vertices.push(new Vertex(i, x, y, vertexDiameter, p, verteValueDisplay));
       angle += step;
     }
+  }
+
+
+  function verteValueDisplay(value) {
+    return value == undefined? 'Inf' : value.toFixed(2);
   }
 
   p.draw = function () {
     p.background(255, 255, 255);
 
-    changeInstructions();
+    showInstructions();
 
     if (mode == 0) {
       drawNewEdge();
@@ -58,7 +61,7 @@ export function dijkstraSketch(p) {
     }
   }
 
-  function changeInstructions() {
+  function showInstructions() {
     switch (mode) {
       case 0:
         p.text('Click on nodes to add link. Keep mouse pressed to increase link weight.\n' +
@@ -77,7 +80,7 @@ export function dijkstraSketch(p) {
         p.text('Finding shortest paths from node ' +  startVertex.id, 10, 10);
         break;
       case 3:
-        p.text('Shortest paths found', 10, 10);
+        p.text('Shortest paths from node '+ startVertex.id +' found', 10, 10);
         button.show();
         button.html('Restart');
         button.mousePressed(function () {
@@ -96,17 +99,20 @@ export function dijkstraSketch(p) {
   }
 
   function drawNewEdge() {
-    if (from != null) {
-      if (p.mouseIsPressed) {
-        weight += 1 / p.deltaTime
-        weight = weight % 10;
-      }
-      p.push();
-      p.stroke(154, 160, 167);
-      p.strokeWeight(weight);
-      p.line(from.x, from.y, p.mouseX, p.mouseY);
-      p.pop();
+    if (from == null) {
+      return;
     }
+
+    if (p.mouseIsPressed) {
+      weight += 1 / p.deltaTime
+      weight = weight % 10;
+    }
+    
+    p.push();
+    p.stroke(154, 160, 167);
+    p.strokeWeight(weight);
+    p.line(from.x, from.y, p.mouseX, p.mouseY);
+    p.pop();
   }
 
   function chooseStartVertex() {
@@ -130,23 +136,31 @@ export function dijkstraSketch(p) {
     mode = 2;
   }
 
+  function getClosestVertex() {
+    for (const v of vertices) {
+      if (p.dist(p.mouseX, p.mouseY, v.x, v.y) < 10) {
+        return v;
+      }
+    }    
+  }
+
   p.mouseReleased = function () {
     if (mode > 0) {
       return;
     }
 
-    for (const v of vertices) {
-      if (p.dist(p.mouseX, p.mouseY, v.x, v.y) < 10) {
-        if (from == null) {
-          from = v;
-        } else {
-          weight = Math.round(weight * 1000) / 1000
-          from.addEdge(v, weight);
-          from = null;
-          weight = 1;
-        }
-        break;
-      }
+    const v = getClosestVertex();
+    if (v == undefined) {
+      return;
+    }
+    
+    if (from == null) {
+      from  = v;
+    } else {
+      weight = Math.round(weight * 1000) / 1000
+      from.addEdge(v, weight);
+      from = null;
+      weight = 1;
     }
   }
 }
