@@ -17,35 +17,32 @@ export function* dijkstraSolver(startVertex, n) {
     let currentVertex = currentEdge.to;
     fromVertex.changeColor(RED);
     currentVertex.changeColor(RED);
+    currentEdge.changeColor(RED);
 
-    let frameCount = 0;
-    while (frameCount < 50) {
+    let pauseCount = 0;
+    while (pauseCount < 50) {
       yield;
-      frameCount++;
+      pauseCount++;
     }
 
-    console.info("Current shortest distance to vertex " + currentVertex.id + ": " + dist[currentVertex.id]);
-    console.info("New distance to vertex " + currentVertex.id + ": " + currentWeight);
-
     if (dist[currentVertex.id] == undefined || currentWeight < dist[currentVertex.id]) {
-      console.info("New shortest distance found");
       dist[currentVertex.id] = currentWeight;
       currentVertex.value = currentWeight;
-      currentEdge.changeColor(RED);
+      currentEdge.changeColor(BLUE);
       for (const [_, nextEdge] of Object.entries(currentVertex.edges)) {
         pq.add([currentWeight + nextEdge.weight, nextEdge]);
       }
     } else {
       currentEdge.changeColor(GREY);
     }
+
     fromVertex.changeColor(BLUE);
     currentVertex.changeColor(BLUE);
 
-
-    frameCount = 0;
-    while (frameCount < 50) {
+    pauseCount = 0;
+    while (pauseCount < 50) {
       yield;
-      frameCount++;
+      pauseCount++;
     }
   }
 }

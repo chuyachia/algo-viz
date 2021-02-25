@@ -11,6 +11,10 @@ export function Edge(weight, from, to, vertexDiameter, p) {
   this.p = p;
 
   this.display = function() {
+    if (this.from == null || this.to == null) {
+      return;
+    }
+
     var angle = this.p.atan2(this.from.y - this.to.y, this.from.x - this.to.x);
     this.p.push();
     this.p.stroke(this.r, this.g, this.b);

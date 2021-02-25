@@ -1,7 +1,18 @@
 body {
   font-family: sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#app {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
+  height: 100vh;
+}
+
+#app > * {
+  padding: 10px;
 }
 
 header {
@@ -11,13 +22,25 @@ header {
 
 #p5-container {
   position: relative;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
 }
 
 #side-bar {
   flex: 0 1 15%;
+  background-color: rgb(154, 160, 167);
+  color: white;
+
+}
+
+#side-bar h5 {
+  cursor: pointer;
 }
 
 #side-bar h5.active::before{
   content: '* ';
+}
+
+#explain {
+  flex: 1 1 auto;
+  align-self:stretch;
 }

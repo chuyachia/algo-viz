@@ -1,5 +1,6 @@
 import { BLUE, GREY, RED } from "../../util/colors";
 import { LinkedList } from "../../util/linkedList";
+import { Edge } from "../common/edge";
 
 export function* topologicalSort(vertices) {
   const state = [];
@@ -8,7 +9,7 @@ export function* topologicalSort(vertices) {
   const VISITING = 1;
   const VISITED = 2;
   let hasCycle = false;
-  let frameCount = 0;
+  let pauseCount = 0;
   const visit = new LinkedList();
   const backtrack = new LinkedList();
 
@@ -22,28 +23,23 @@ export function* topologicalSort(vertices) {
       continue;
     }
 
-    visit.addFirst({seq, vertex});
-    backtrack.addFirst({seq, vertex});
+    visit.addFirst({seq, edge : new Edge(0, null, vertex, 0, 0)});
+    backtrack.addFirst({seq, edge: new Edge(0, null, vertex, 0, 0)});
     seq++;
 
     while (visit.size() > 0) {
-      while (backtrack.size() > 0 && visit.peek().seq != backtrack.peek().seq ) {
-        let backTrackV = backtrack.poll().vertex;
-        state[backTrackV.id] = VISITED;
-        backTrackV.changeColor(GREY);
-        backTrackV.value = sortedIndex;
-        sorted[--sortedIndex] = backTrackV.id;
-        frameCount = 0;
-        while (frameCount < 50) {
-          yield hasCycle ? [] : sorted;
-          frameCount++;
-        }
-      }
-
-      let current = visit.poll().vertex;
+      let currentEdge = visit.poll().edge;
+      let current = currentEdge.to;
 
       state[current.id] = VISITING;
+      currentEdge.changeColor(RED);
       current.changeColor(RED);
+
+      pauseCount = 0;
+      while (pauseCount < 50) {
+        yield hasCycle ? [] : sorted;
+        pauseCount++;
+      }
 
       for (const [_, edge] of Object.entries(current.edges)) {
         let next = edge.to;
@@ -56,29 +52,26 @@ export function* topologicalSort(vertices) {
           break;
         }
   
-        next.changeColor(BLUE);
-        visit.addFirst({seq, vertex: next});
-        backtrack.addFirst({seq, vertex: next});
+        visit.addFirst({seq, edge});
+        backtrack.addFirst({seq, edge});
         seq++;
       }
 
-      frameCount = 0;
-      while (frameCount < 50) {
-        yield hasCycle ? [] : sorted;
-        frameCount++;
-      }
-    }
 
-    while (backtrack.size() > 0) {
-      let backTrackV = backtrack.poll().vertex;
-      state[backTrackV.id] = VISITED;
-      backTrackV.changeColor(GREY);
-      backTrackV.value = sortedIndex;
-      sorted[--sortedIndex] = backTrackV.id;
-      frameCount = 0;
-      while (frameCount < 50) {
-        yield hasCycle ? [] : sorted;
-        frameCount++;
+      while (backtrack.size() > 0 &&
+       (visit.size() == 0 || visit.peek().seq != backtrack.peek().seq)) {
+        let { edge } = backtrack.poll();
+        let vertex = edge.to;
+        state[vertex.id] = VISITED;
+        edge.changeColor(GREY);
+        vertex.changeColor(BLUE);
+        vertex.value = sortedIndex;
+        sorted[--sortedIndex] = vertex.id;
+        pauseCount = 0;
+        while (pauseCount < 50) {
+          yield hasCycle ? [] : sorted;
+          pauseCount++;
+        }
       }
     }
   }

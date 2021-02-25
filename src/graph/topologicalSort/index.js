@@ -60,7 +60,6 @@ export function topologicalSortSketch(p) {
       drawNewEdge();
     } else if (mode == 1) {
       let state = topoSortSolver.next();
-      console.log(state);
       if (state.done) {
         mode = 2;
       } else{

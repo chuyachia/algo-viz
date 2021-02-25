@@ -5,6 +5,7 @@ import './assets/index.css';
 (function() {
   const sidebar = document.querySelector('#side-bar');
   const p5Container = document.querySelector('#p5-container');
+  const explain = document.querySelector('#explain');
   let module;
 
   let sketch;
@@ -22,11 +23,13 @@ import './assets/index.css';
           module = await import('./graph/dijkstra');
           const { dijkstraSketch } = module;
           sketch = new p5(dijkstraSketch, 'p5-container');
+          explain.innerHTML = "Explain how Dijkstra works";
           break;
         case 'topo-sort':
           module = await import('./graph/topologicalSort');
           const {topologicalSortSketch} = module;
           sketch = new p5(topologicalSortSketch, 'p5-container');
+          explain.innerHTML = "Explain how togological sort works";
           break;
       }
     }
