@@ -12,6 +12,20 @@ export function* topologicalSort(vertices) {
   let pauseCount = 0;
   const visit = new LinkedList();
   const backtrack = new LinkedList();
+  function renderDisplayValue(value) {
+    if (value == undefined) {
+      return 'NA';
+    }
+    if (value == 1) {
+      return value+ 'st';
+    } else if (value == 2) {
+      return value+ 'nd';
+    } else if (value == 3) {
+      return value+'rd';
+    } else {
+      return value+'th';
+    }
+  }
 
   for (let vertex of vertices) {
     let seq = 0;
@@ -65,7 +79,7 @@ export function* topologicalSort(vertices) {
         state[vertex.id] = VISITED;
         edge.changeColor(GREY);
         vertex.changeColor(BLUE);
-        vertex.value = sortedIndex;
+        vertex.displayValue = renderDisplayValue(sortedIndex);
         sorted[--sortedIndex] = vertex.id;
         pauseCount = 0;
         while (pauseCount < 50) {

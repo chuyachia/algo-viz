@@ -4,7 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (env) => ({
   mode: env.NODE_ENV === 'development'? 'development' : 'production',
-  entry: './src/index.js',
+  entry: {
+    main: path.resolve(__dirname, 'src/index.js'),
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
@@ -30,11 +32,11 @@ module.exports = (env) => ({
   optimization: {
     splitChunks: {
       cacheGroups: {
-        commons: {
+        vendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'all',
-        },
+        }
       },
     },
   },

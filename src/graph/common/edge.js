@@ -4,36 +4,35 @@ export function Edge(weight, from, to, vertexDiameter, p) {
   this.weight = weight;
   this.from = from;
   this.to = to;
-  this.d = vertexDiameter;
-  this.r = GREY.r;
-  this.b = GREY.b;
-  this.g = GREY.g;
-  this.p = p;
+  
+  let r = GREY.r;
+  let b = GREY.b;
+  let g = GREY.g;
 
   this.display = function() {
     if (this.from == null || this.to == null) {
       return;
     }
 
-    var angle = this.p.atan2(this.from.y - this.to.y, this.from.x - this.to.x);
-    this.p.push();
-    this.p.stroke(this.r, this.g, this.b);
-    this.p.strokeWeight(this.weight);
-    let l = this.p.line(this.from.x, this.from.y, this.to.x + this.d * this.p.cos(angle), this.to.y + this.d * this.p.sin(angle));
-    this.p.pop();
+    var angle = p.atan2(this.from.y - this.to.y, this.from.x - this.to.x);
+    p.push();
+    p.stroke(r, g, b);
+    p.strokeWeight(this.weight);
+    let l = p.line(this.from.x, this.from.y, this.to.x + vertexDiameter * p.cos(angle), this.to.y + vertexDiameter * p.sin(angle));
+    p.pop();
 
-    this.p.push();
-    this.p.translate(this.to.x, this.to.y);
-    this.p.rotate(angle - this.p.HALF_PI);
-    this.p.stroke(this.r, this.g, this.b);
-    this.p.fill(this.p.color(255, 255, 255));
-    this.p.triangle(0, this.d / 2, this.d/ 4, this.d, -this.d/4, this.d);
-    this.p.pop();
+    p.push();
+    p.translate(this.to.x, this.to.y);
+    p.rotate(angle - p.HALF_PI);
+    p.stroke(r, g, b);
+    p.fill(p.color(255, 255, 255));
+    p.triangle(0, vertexDiameter / 2, vertexDiameter/ 4, vertexDiameter, -vertexDiameter/4, vertexDiameter);
+    p.pop();
   }
 
   this.changeColor = function(colorObject) {
-    this.r = colorObject.r;
-    this.g = colorObject.g;
-    this.b = colorObject.b;
+    r = colorObject.r;
+    g = colorObject.g;
+    b = colorObject.b;
   }
 }

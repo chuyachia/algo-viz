@@ -1,63 +1,41 @@
-import { Vertex } from '../common/vertex';
+import { drawVertices, getClosestVertex } from '../common/graph';
+import { GrowingEdge } from '../common/growingEdge';
 import { topologicalSort } from './topologicalSort';
 
 export function topologicalSortSketch(p) {
   const canvasWidth = 550;
   const canvasHeight = 550;
-  var n = 20;
-  var vertices = [];
-  var radius = 200;
-  var from;
-  var vertexDiameter = 30;
-  var button;
-  var mode = 0;
-  var topoSortSolver;
+  const radius = 200;
+  const vertexDiameter = 30;
+  
+  let n = 20;
+  let vertices = [];
+  let pendingEdge;
+  let pendingEdgeFrom;
+  let button;
+  let mode = 0;
+  let topoSortSolver;
   let topoOrdering = [];
 
   p.setup = function () {
     p.createCanvas(canvasWidth, canvasHeight);
     drawButton();
-    drawGraph();
+    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, vertexDiameter, '?');
   }
 
   function drawButton() {
     button = p.createButton('');
     button.position(10, 40);
   }
-
-  function drawGraph() {
-    let step = p.TWO_PI / n;
-    let angle = 0;
-    for (let i = 0;i < n;i++) {
-      let x = radius * p.cos(angle) + canvasWidth/2;
-      let y = radius * p.sin(angle) + canvasHeight/2;
-      vertices.push(new Vertex(i, x, y, vertexDiameter, p, verteValueDisplay));
-      angle += step;
-    }
-  }
-
-  function verteValueDisplay(value) {
-    if (value == undefined) {
-      return 'NA';
-    }
-    if (value == 1) {
-      return value+ 'st';
-    } else if (value == 2) {
-      return value+ 'nd';
-    } else if (value == 3) {
-      return value+'rd';
-    } else {
-      return value+'th';
-    }
-  }
-
+  
   p.draw = function() {
     p.background(255, 255, 255);
-
     showInstructions();
 
     if (mode == 0) {
-      drawNewEdge();
+      if (pendingEdge !== undefined) {
+        pendingEdge.display();
+      }
     } else if (mode == 1) {
       let state = topoSortSolver.next();
       if (state.done) {
@@ -107,26 +85,7 @@ export function topologicalSortSketch(p) {
     vertices = [];
     topoSortSolver = undefined;
     mode = 0;
-    drawGraph();
-  }
-
-  function drawNewEdge() {
-    if (from == null) {
-      return;
-    }
-
-    p.push();
-    p.stroke(154, 160, 167);
-    p.line(from.x, from.y, p.mouseX, p.mouseY);
-    p.pop();
-  }
-
-  function getClosestVertex() {
-    for (const v of vertices) {
-      if (p.dist(p.mouseX, p.mouseY, v.x, v.y) < 10) {
-        return v;
-      }
-    }    
+    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, vertexDiameter, '?');
   }
 
   p.mouseReleased = function () {
@@ -134,16 +93,19 @@ export function topologicalSortSketch(p) {
       return;
     }
 
-    const v = getClosestVertex();
-    if (v == undefined) {
+    const currentVertex = getClosestVertex(p, vertices);
+    
+    if (currentVertex === undefined) {
       return;
     }
     
-    if (from == null) {
-      from  = v;
+    if (pendingEdgeFrom === undefined) {
+      pendingEdgeFrom  = currentVertex;
+      pendingEdge = new GrowingEdge(pendingEdgeFrom.x, pendingEdgeFrom.y, p);
     } else {
-      from.addEdge(v, 1);
-      from = null;
+      pendingEdgeFrom.addEdge(currentVertex, 1);
+      pendingEdgeFrom = undefined;
+      pendingEdge = undefined;
     }
   }
 
