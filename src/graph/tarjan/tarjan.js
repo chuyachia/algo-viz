@@ -1,9 +1,11 @@
-import { BLUE, RED } from "../../util/colors";
+import { LinkedList } from "../../util/linkedList";
 
 export function* tarjan(vertices) {
   const VISITING = 1;
   const VISITED = 2;
   const state = new Array(vertices.length);
+  const visit = new LinkedList();
+  const backtrack = new LinkedList();
   let lowLink = 0;
   let pauseCount = 0;
 
@@ -11,53 +13,57 @@ export function* tarjan(vertices) {
     if (state[vertex.id] === VISITED) {
       continue;
     }
-    let dfsSolver = dfs(vertex, lowLink);
-    while (!dfsSolver.next().done) {
-      yield dfsSolver.next();
-    }
-  }
 
-  function* dfs(vertex, startLowLink) {
-    vertex.changeColor(RED);
-    state[vertex.id] = VISITING;
-    vertex.displayValue = lowLink++;
-    pauseCount = 0;
-    while (pauseCount < 50) {
-      yield;
-      pauseCount++;
-    }
+    let startLowLink = lowLink;
+    let seq = 0;
+    visit.addFirst({seq, vertex});
+    backtrack.addFirst({seq, vertex});
+    seq++;
 
-    for (const [_, edge] of Object.entries(vertex.edges)) {
-      let nextVertex = edge.to;
-      edge.changeColor(RED);
+    while (visit.size() > 0) {
+      let currentVertex = visit.poll().vertex;
+      state[currentVertex.id] = VISITING;
+      currentVertex.displayValue = lowLink++;  
+      const randomColorObject = {
+        r: Math.floor(Math.random() * 256),
+        g: Math.floor(Math.random() * 256),
+        b: Math.floor(Math.random() * 256),
+      }
+      
+      currentVertex.changeColor(randomColorObject);
       pauseCount = 0;
       while (pauseCount < 50) {
         yield;
         pauseCount++;
       }
-      if (state[nextVertex.id] === undefined) {
-        let dfsSolver = dfs(nextVertex, startLowLink);
-        while (!dfsSolver.next().done) {
-          yield dfsSolver.next();
+
+      for (const [_, edge] of Object.entries(currentVertex.edges)) {
+        let nextVertex = edge.to;
+
+        if (state[nextVertex.id] === undefined) {
+          visit.addFirst({seq, vertex : nextVertex});
+          backtrack.addFirst({seq, vertex : nextVertex});
+          seq++;
+        } else if (nextVertex.displayValue >=startLowLink) {
+
+          while (backtrack.size() > 0 && (visit.size() === 0 || backtrack.peek().seq !== visit.peek().seq)) {
+            let backtrackVertex = backtrack.poll().vertex;
+            state[backtrackVertex.id] = VISITED;
+            backtrackVertex.displayValue = Math.min(backtrackVertex.displayValue, nextVertex.displayValue);
+            backtrackVertex.changeColor(nextVertex.getColor());
+            pauseCount = 0;
+            while (pauseCount < 50) {
+              yield;
+              pauseCount++;
+            }
+          }
         }
       }
 
-      if (nextVertex.displayValue >= startLowLink) {
-        vertex.displayValue = Math.min(vertex.displayValue, nextVertex.displayValue);
+      while (backtrack.size() > 0  && (visit.size() === 0 || backtrack.peek().seq !== visit.peek().seq)) {
+        let backtrackVertex = backtrack.poll().vertex;
+        state[backtrackVertex.id] = VISITED;
       }
-      edge.changeColor(BLUE);
-      pauseCount = 0;
-      while (pauseCount < 50) {
-        yield;
-        pauseCount++;
-      }
-    }
-    vertex.changeColor(BLUE);
-    state[vertex.id] = VISITED;
-    pauseCount = 0;
-    while (pauseCount < 50) {
-      yield;
-      pauseCount++;
     }
   }
 }

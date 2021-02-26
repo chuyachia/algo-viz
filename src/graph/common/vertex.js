@@ -34,6 +34,12 @@ export function Vertex(id, x, y, diameter, p, defaultDisplayValue) {
     b = colorObject.b;
   }
 
+  this.getColor = function() {
+    return {
+      r, g, b
+    };
+  }
+
   this.addEdge = function(vertex, weight) {
     if (vertex.id != this.id) {
       this.edges[vertex.id] = new Edge(weight, this, vertex, diameter, p);

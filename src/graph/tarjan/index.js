@@ -52,8 +52,8 @@ export function tarjanSketch(p) {
     switch (mode) {
       case 0:
         p.text('Click on nodes to add link.\n' +
-          'Once the graph is done, click on the button to find topological ordering of the nodes', 10, 10);
-        button.html('Find topological ordering');
+          'Once the graph is done, click on the button to find strongly connected components', 10, 10);
+        button.html('Find strongly connected components');
         button.show();
         button.mousePressed(function () {
           mode = 1;
@@ -61,11 +61,11 @@ export function tarjanSketch(p) {
         });
         break;
       case 1:
-        p.text('Finding topological ordering', 10, 10);
+        p.text('Finding strongly connected components', 10, 10);
         button.hide();
         break;
       case 2:
-        p.text('Topological ordering found', 10, 10);
+        p.text('Strongly connected components found', 10, 10);
         button.show();
         button.html('Restart');
         button.mousePressed(function () {
