@@ -6,9 +6,18 @@ import './assets/index.css';
   const sidebar = document.querySelector('#side-bar');
   const p5Container = document.querySelector('#p5-container');
   const explain = document.querySelector('#explain');
+
+  async function dynamicLoadModule(path) {
+    let module = await import(`./graph/${path}`);
+
+    const { sketch, explainText } = module;
+    canvas = new p5(sketch, 'p5-container');
+    explain.innerHTML = explainText;
+  }
+
   let module;
 
-  let sketch;
+  let canvas;
   sidebar.addEventListener('click', async function (e) {
     let target = e.target;
     if (target.nodeName === 'H5') {
@@ -20,24 +29,14 @@ import './assets/index.css';
       p5Container.innerHTML = '';
       switch (target.id) {
         case 'dijkstra':
-          module = await import('./graph/dijkstra');
-          const { dijkstraSketch } = module;
-          sketch = new p5(dijkstraSketch, 'p5-container');
-          explain.innerHTML = "Explain how Dijkstra works";
+          await dynamicLoadModule('dijkstra');
           break;
         case 'topo-sort':
-          module = await import('./graph/topologicalSort');
-          const { topologicalSortSketch } = module;
-          sketch = new p5(topologicalSortSketch, 'p5-container');
-          explain.innerHTML = "Explain how togological sort works";
+          await dynamicLoadModule('topologicalSort');
           break;
         case 'tarjan':
-          module = await import('./graph/tarjan');
-          const { tarjanSketch } = module;
-          sketch = new p5(tarjanSketch, 'p5-container');
-          explain.innerHTML = "Explain how tarjan sort works";
+          await dynamicLoadModule('tarjan');
           break;
-
       }
     }
   });

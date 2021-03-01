@@ -1,8 +1,9 @@
+import { BLUE, GREY, RED } from '../../util/colors';
 import { drawVertices, getClosestVertex } from '../common/graph';
 import { GrowingEdge } from '../common/growingEdge';
 import { dijkstraSolver } from './dijkstra';
 
-export function dijkstraSketch(p) {
+export function sketch(p) {
   const canvasWidth = 550;
   const canvasHeight = 550;
   const radius = 200;
@@ -31,6 +32,7 @@ export function dijkstraSketch(p) {
   p.draw = function () {
     p.background(255, 255, 255);
     showInstructions();
+    showLabels();
 
     if (mode === 0) {
       if (pendingEdge !== undefined) {
@@ -51,12 +53,29 @@ export function dijkstraSketch(p) {
     }
   }
 
+  function showLabels() {
+    p.push();
+    p.strokeWeight(0);
+    p.fill(p.color(GREY.r, GREY.b, GREY.g));
+    p.circle(vertexDiameter, canvasHeight - vertexDiameter, vertexDiameter);
+    p.fill(p.color(0, 0, 0));
+    p.textAlign(p.LEFT);
+    p.text("ID : distance", 2 * vertexDiameter, canvasHeight - vertexDiameter);
+    p.fill(p.color(RED.r, RED.b, RED.g));
+    p.circle(vertexDiameter, canvasHeight - 2 * vertexDiameter, vertexDiameter);
+    p.text("Visiting", 2 * vertexDiameter, canvasHeight - 2 * vertexDiameter);
+    p.fill(p.color(BLUE.r, BLUE.b, BLUE.g));
+    p.circle(vertexDiameter, canvasHeight - 3 * vertexDiameter, vertexDiameter);
+    p.text("Reachable", 2 * vertexDiameter, canvasHeight - 3 * vertexDiameter);
+    p.pop();
+  }
+
   function showInstructions() {
     switch (mode) {
       case 0:
         p.text('Click on nodes to add link. Keep mouse pressed to increase link weight.\n' +
-          'Once the graph is done, click on the button to find shortest paths', 10, 10);
-        button.html('Find shortest paths');
+          'Once the graph is done, click on the button to find shortest distance', 10, 10);
+        button.html('Find shortest distance');
         button.show();
         button.mousePressed(function () {
           mode = 1;
@@ -67,10 +86,10 @@ export function dijkstraSketch(p) {
         button.hide();
         break;
       case 2:
-        p.text('Finding shortest paths from node ' +  startVertex.id, 10, 10);
+        p.text('Finding shortest distance from node ' + startVertex.id, 10, 10);
         break;
       case 3:
-        p.text('Shortest paths from node '+ startVertex.id +' found', 10, 10);
+        p.text('Shortest distance from node ' + startVertex.id + ' found', 10, 10);
         button.show();
         button.html('Restart');
         button.mousePressed(function () {
@@ -85,7 +104,7 @@ export function dijkstraSketch(p) {
     startVertex = undefined;
     dSolver = undefined;
     mode = 0;
-    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, vertexDiameter, '?');
+    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, vertexDiameter, 'Inf');
   }
 
   p.mouseClicked = function () {
@@ -94,7 +113,7 @@ export function dijkstraSketch(p) {
     }
 
     startVertex = getClosestVertex(p, vertices);
-    
+
     if (startVertex !== undefined) {
       dSolver = dijkstraSolver(startVertex, n);
       mode = 2;
@@ -111,9 +130,9 @@ export function dijkstraSketch(p) {
     if (currentVertex === undefined) {
       return;
     }
-    
+
     if (pendingEdgeFrom === undefined) {
-      pendingEdgeFrom  = currentVertex;
+      pendingEdgeFrom = currentVertex;
       pendingEdge = new GrowingEdge(pendingEdgeFrom.x, pendingEdgeFrom.y, p);
     } else {
       let roundedWeight = Math.round(pendingEdge.weight * 1000) / 1000
@@ -123,3 +142,5 @@ export function dijkstraSketch(p) {
     }
   }
 }
+
+export const explainText = "<p>Dijkstra's algorithm finds the shortest distance from one node to all other nodes in graphs with non negative edges. It starts with a node, updates the distance to all its neighbors if the current distance to the neighbor is smaller than previously calculated distance. The current distance from a node to it's neighbor is the sum of the distance to the node and the weight of the edge leading to the neighbor.</p><p>Once all neighbors of a node are visited, the algorithm continues the same procedure with the node that is currently reachable with the shortest distance. Nodes that are already visited will not be revisited. Priority queue (binary heap) can be used to keep track of the reachable nodes and their distances. Head of the queue will have the current reachable node with the shortest distance.</p>";

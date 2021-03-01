@@ -2,7 +2,7 @@ import { drawVertices, getClosestVertex } from '../common/graph';
 import { GrowingEdge } from '../common/growingEdge';
 import { tarjan } from './tarjan';
 
-export function tarjanSketch(p) {
+export function sketch(p) {
   const canvasWidth = 550;
   const canvasHeight = 550;
   const radius = 200;
@@ -15,7 +15,6 @@ export function tarjanSketch(p) {
   let button;
   let mode = 0;
   let tarjanSolver;
-  // let topoOrdering = [];
 
   p.setup = function () {
     p.createCanvas(canvasWidth, canvasHeight);
@@ -104,3 +103,5 @@ export function tarjanSketch(p) {
   }
 
 }
+
+export const explainText = "<p>Tarjan's algorithm finds strongly connected components in a graph. A strongly connected component is a group of nodes in which every node is reachable by any other node.</p><p>The algorithm starts at a random node and uses depth first search to visit all its neighbors and their neighbors. When visiting a node, a low link value is assigned to the node which represents the lowest node reachable from current node. Low link value is initialized to 0 and increment each time it's assigned to a node.</p><p>When meeting a node already visited during current depth first search, the algorithm backtracks and update the low link value to the lower value between the already visited node and the currently visiting node.</p><p>After visiting all reachable nodes from current depth first search start point, the algorithm picks the next random univisted node and repeat the procedure. Note that low link value should only be updated when meeting node visited during current depth first search, not the previously visited ones.</p><p>Nodes with the same low link value belong to one strongly connected component.</p>";

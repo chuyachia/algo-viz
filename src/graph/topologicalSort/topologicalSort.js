@@ -1,5 +1,6 @@
 import { BLUE, GREY, RED } from "../../util/colors";
 import { LinkedList } from "../../util/linkedList";
+import { waitNFrame } from "../../util/waitNFrame";
 import { Edge } from "../common/edge";
 
 export function* topologicalSort(vertices) {
@@ -9,7 +10,7 @@ export function* topologicalSort(vertices) {
   const VISITING = 1;
   const VISITED = 2;
   let hasCycle = false;
-  let pauseCount = 0;
+  let shoudContinue = waitNFrame(50);
   const visit = new LinkedList();
   const backtrack = new LinkedList();
   function renderDisplayValue(value) {
@@ -49,10 +50,8 @@ export function* topologicalSort(vertices) {
       currentEdge.changeColor(RED);
       current.changeColor(RED);
 
-      pauseCount = 0;
-      while (pauseCount < 50) {
+      while (shoudContinue.next().value === false) {
         yield hasCycle ? [] : sorted;
-        pauseCount++;
       }
 
       for (const [_, edge] of Object.entries(current.edges)) {
@@ -81,10 +80,8 @@ export function* topologicalSort(vertices) {
         vertex.changeColor(BLUE);
         vertex.displayValue = renderDisplayValue(sortedIndex);
         sorted[--sortedIndex] = vertex.id;
-        pauseCount = 0;
-        while (pauseCount < 50) {
+        while (shoudContinue.next().value === false) {
           yield hasCycle ? [] : sorted;
-          pauseCount++;
         }
       }
     }

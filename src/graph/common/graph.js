@@ -17,7 +17,7 @@ export function drawVertices(p, n, canvasWidth, canvasHeight, graphRadius, verte
 
 export function getClosestVertex(p, vertices) {
   for (const v of vertices) {
-    if (p.dist(p.mouseX, p.mouseY, v.x, v.y) < 10) {
+    if (p.dist(p.mouseX, p.mouseY, v.x, v.y) < 20) {
       return v;
     }
   }    

@@ -1,56 +1,46 @@
 import { BLUE, GREY, RED } from '../../util/colors';
 import { PriorityQueue } from '../../util/priorityQueue';
+import { waitNFrame } from '../../util/waitNFrame';
 
 export function* dijkstraSolver(startVertex, n) {
   const dist = new Array(n);
   const visited = new Array(n);
-  dist[startVertex.id] = 0;
-  visited[startVertex.id] = true;
-  startVertex.value = 0;
-  startVertex.displayValue = 0;
+  let shoudContinue = waitNFrame(50);
   const pq = new PriorityQueue((p1, p2) => p1[0] - p2[0]);
 
-  for (const [_, edge] of Object.entries(startVertex.edges)) {
-    pq.add([edge.weight, edge]);
-  }
+  pq.add([0, startVertex]);
+  dist[startVertex.id] = 0;
+  startVertex.displayValue = 0;
 
   while (pq.size() > 0) {
-    let [currentWeight, currentEdge] = pq.poll();
-    let fromVertex = currentEdge.from;
-    let currentVertex = currentEdge.to;
+    let [currentWeight, currentVertex] = pq.poll();
+    if (visited[currentVertex.id]) {
+      continue;
+    }
+
     visited[currentVertex.id] = true;
-    fromVertex.changeColor(RED);
     currentVertex.changeColor(RED);
-    currentEdge.changeColor(RED);
 
-    let pauseCount = 0;
-    while (pauseCount < 50) {
+    while (shoudContinue.next().value === false) {
       yield;
-      pauseCount++;
     }
 
-    if (dist[currentVertex.id] == undefined || currentWeight < dist[currentVertex.id]) {
-      dist[currentVertex.id] = currentWeight;
-      currentVertex.value = currentWeight;
-      currentVertex.displayValue = currentWeight.toFixed(2);
-      currentEdge.changeColor(BLUE);
-      for (const [_, nextEdge] of Object.entries(currentVertex.edges)) {
-        if (visited[nextEdge.to.id]) {
-          continue;
-        }
-        pq.add([currentWeight + nextEdge.weight, nextEdge]);
+    for (const [_, nextEdge] of Object.entries(currentVertex.edges)) {
+      let nextWeight = currentWeight + nextEdge.weight;
+      let nextVertex = nextEdge.to;
+      nextEdge.changeColor(RED);
+      nextVertex.changeColor(BLUE);
+      if (dist[nextVertex.id] === undefined || nextWeight < dist[nextVertex.id]) {
+        dist[nextVertex.id] = nextWeight;
+        nextVertex.displayValue = nextWeight.toFixed(2);
+        pq.add([ nextWeight, nextVertex]);
       }
-    } else {
-      currentEdge.changeColor(GREY);
+      while (shoudContinue.next().value === false) {
+        yield;
+      }
+      nextEdge.changeColor(GREY);
     }
 
-    fromVertex.changeColor(BLUE);
     currentVertex.changeColor(BLUE);
-
-    pauseCount = 0;
-    while (pauseCount < 50) {
-      yield;
-      pauseCount++;
-    }
   }
 }
