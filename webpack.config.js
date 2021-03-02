@@ -1,6 +1,7 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env) => ({
   mode: env.NODE_ENV === 'development'? 'development' : 'production',
@@ -12,6 +13,7 @@ module.exports = (env) => ({
     new HtmlWebpackPlugin({
       template: './src/assets/index.html'
     }),
+    new MiniCssExtractPlugin(),
 
   ],
   output: {
@@ -25,7 +27,7 @@ module.exports = (env) => ({
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       }
     ]
   },
