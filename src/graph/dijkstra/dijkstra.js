@@ -4,10 +4,12 @@ import { waitNFrame } from '../../util/waitNFrame';
 
 export function* dijkstraSolver(startVertex, n) {
   const dist = new Array(n);
+  const path = new Array(n);
   const visited = new Array(n);
   let shoudContinue = waitNFrame(50);
   const pq = new PriorityQueue((p1, p2) => p1[0] - p2[0]);
 
+  startVertex.changeStrokeWeight(5);
   pq.add([0, startVertex]);
   dist[startVertex.id] = 0;
   startVertex.displayValue = 0;
@@ -25,7 +27,7 @@ export function* dijkstraSolver(startVertex, n) {
       yield;
     }
 
-    for (const [_, nextEdge] of Object.entries(currentVertex.edges)) {
+    for (const nextEdge of currentVertex.edges) {
       let nextWeight = currentWeight + nextEdge.weight;
       let nextVertex = nextEdge.to;
       nextEdge.changeColor(RED);
@@ -34,6 +36,7 @@ export function* dijkstraSolver(startVertex, n) {
         dist[nextVertex.id] = nextWeight;
         nextVertex.displayValue = nextWeight.toFixed(2);
         pq.add([ nextWeight, nextVertex]);
+        path[nextVertex.id] = nextEdge;
       }
       while (shoudContinue.next().value === false) {
         yield;
@@ -42,5 +45,11 @@ export function* dijkstraSolver(startVertex, n) {
     }
 
     currentVertex.changeColor(BLUE);
+  }
+
+  for (let edge of path) {
+    if (edge !== undefined) {
+      edge.changeColor(BLUE);
+    }
   }
 }

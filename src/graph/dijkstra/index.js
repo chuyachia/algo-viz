@@ -56,15 +56,15 @@ export function sketch(p) {
   function showLabels() {
     p.push();
     p.strokeWeight(0);
-    p.fill(p.color(GREY.r, GREY.b, GREY.g));
+    p.fill(GREY.r, GREY.b, GREY.g);
     p.circle(vertexDiameter, canvasHeight - vertexDiameter, vertexDiameter);
-    p.fill(p.color(0, 0, 0));
+    p.fill(0, 0, 0);
     p.textAlign(p.LEFT);
     p.text("ID : distance", 2 * vertexDiameter, canvasHeight - vertexDiameter);
-    p.fill(p.color(RED.r, RED.b, RED.g));
+    p.fill(RED.r, RED.b, RED.g);
     p.circle(vertexDiameter, canvasHeight - 2 * vertexDiameter, vertexDiameter);
     p.text("Visiting", 2 * vertexDiameter, canvasHeight - 2 * vertexDiameter);
-    p.fill(p.color(BLUE.r, BLUE.b, BLUE.g));
+    p.fill(BLUE.r, BLUE.b, BLUE.g);
     p.circle(vertexDiameter, canvasHeight - 3 * vertexDiameter, vertexDiameter);
     p.text("Reachable", 2 * vertexDiameter, canvasHeight - 3 * vertexDiameter);
     p.pop();

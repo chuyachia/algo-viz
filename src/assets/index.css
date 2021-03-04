@@ -29,7 +29,6 @@ header {
   flex: 0 0 15%;
   background-color: rgb(154, 160, 167);
   color: white;
-
 }
 
 #side-bar h5 {
@@ -43,4 +42,17 @@ header {
 #explain {
   flex: 1 1 auto;
   align-self:stretch;
+}
+
+
+@media only screen and (max-width: 767px) {
+  #app {
+    flex-flow: row wrap;
+  }
+
+  #side-bar,
+  #explain {
+    flex: 1 1 100%;
+  }
+  
 }

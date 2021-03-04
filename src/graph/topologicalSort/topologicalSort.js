@@ -54,7 +54,7 @@ export function* topologicalSort(vertices) {
         yield hasCycle ? [] : sorted;
       }
 
-      for (const [_, edge] of Object.entries(current.edges)) {
+      for (const edge of current.edges) {
         let next = edge.to;
         if (state[next.id] == VISITED) {
           continue;

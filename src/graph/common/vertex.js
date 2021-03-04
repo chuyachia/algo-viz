@@ -5,25 +5,29 @@ export function Vertex(id, x, y, diameter, p, defaultDisplayValue) {
   this.id = id;
   this.x = x;
   this.y = y;
-  this.edges = {};
+  this.edges = [];
   this.value;
   this.displayValue = defaultDisplayValue;
 
   let r = GREY.r;
   let b = GREY.b;
   let g = GREY.g;
-
+  let strokeWeight = 0;
+  let existingEdges = new Set();
 
   this.display = function() {
     p.push();
-    p.strokeWeight(0);
-    p.fill(p.color(r, b, g));
+    p.stroke(r, b, g, 80);
+    p.strokeWeight(strokeWeight);
+    p.fill(r, b, g);
     p.circle(this.x, this.y, diameter);
-    p.fill(p.color(0,0,0));
+    p.fill(0,0,0);
+    p.strokeWeight(0);
+    let displayText = this.displayValue.length > 0?  ' : ' + this.displayValue : '';
     p.textAlign(p.CENTER);
-    p.text(this.id + " : " + this.displayValue, this.x, this.y + diameter);
+    p.text(this.id + displayText , this.x, this.y + diameter);
     p.pop();
-    for (const [_, edge] of Object.entries(this.edges)) {
+    for (const edge of this.edges) {
       edge.display();
     }
   }
@@ -40,9 +44,14 @@ export function Vertex(id, x, y, diameter, p, defaultDisplayValue) {
     };
   }
 
+  this.changeStrokeWeight = function(sw) {
+    strokeWeight = sw;
+  }
+
   this.addEdge = function(vertex, weight) {
-    if (vertex.id != this.id) {
-      this.edges[vertex.id] = new Edge(weight, this, vertex, diameter, p);
+    if (vertex.id != this.id && ! existingEdges.has(vertex.id)) {
+      existingEdges.add(vertex.id);
+      this.edges.push(new Edge(weight, this, vertex, diameter, p, true));
     }
   }
 }

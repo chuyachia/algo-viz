@@ -1,3 +1,4 @@
+import { GREY } from '../../util/colors';
 import { drawVertices, getClosestVertex } from '../common/graph';
 import { GrowingEdge } from '../common/growingEdge';
 import { tarjan } from './tarjan';
@@ -30,6 +31,7 @@ export function sketch(p) {
   p.draw = function() {
     p.background(255, 255, 255);
     showInstructions();
+    showLabels();
 
     if (mode == 0) {
       if (pendingEdge !== undefined) {
@@ -45,6 +47,17 @@ export function sketch(p) {
     for (const v of vertices) {
       v.display();
     }
+  }
+
+  function showLabels() {
+    p.push();
+    p.strokeWeight(0);
+    p.fill(GREY.r, GREY.b, GREY.g);
+    p.circle(vertexDiameter, canvasHeight - vertexDiameter, vertexDiameter);
+    p.textAlign(p.LEFT);
+    p.fill(0, 0, 0);
+    p.text("ID : group", 2 * vertexDiameter, canvasHeight - vertexDiameter);
+    p.pop();
   }
 
   function showInstructions() {

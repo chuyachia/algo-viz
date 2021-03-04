@@ -41,7 +41,7 @@ export function* tarjan(vertices) {
         yield;
       }
 
-      for (const [_, edge] of Object.entries(currentVertex.edges)) {
+      for (const edge of currentVertex.edges) {
         let nextVertex = edge.to;
         if (state[nextVertex.id] === undefined) {
           visit.addFirst({seq, edge });

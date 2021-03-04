@@ -37,6 +37,9 @@ import './assets/index.css';
         case 'tarjan':
           await dynamicLoadModule('tarjan');
           break;
+        case 'hierholzer':
+          await dynamicLoadModule('hierholzer');
+          break;
       }
     }
   });
