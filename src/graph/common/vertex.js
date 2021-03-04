@@ -27,6 +27,9 @@ export function Vertex(id, x, y, diameter, p, defaultDisplayValue) {
     p.textAlign(p.CENTER);
     p.text(this.id + displayText , this.x, this.y + diameter);
     p.pop();
+  }
+
+  this.displayEdges = function() {
     for (const edge of this.edges) {
       edge.display();
     }

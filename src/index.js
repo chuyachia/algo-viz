@@ -15,8 +15,6 @@ import './assets/index.css';
     explain.innerHTML = explainText;
   }
 
-  let module;
-
   let canvas;
   sidebar.addEventListener('click', async function (e) {
     let target = e.target;

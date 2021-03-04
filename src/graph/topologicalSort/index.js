@@ -27,6 +27,7 @@ export function sketch(p) {
   function drawButton() {
     button = p.createButton('');
     button.position(10, 40);
+    button.addClass('action-button');
   }
 
   p.draw = function () {
@@ -47,6 +48,11 @@ export function sketch(p) {
       }
     }
 
+    for (const v of vertices) {
+      v.displayEdges();
+    }
+
+    // So that vertex text will show on top of edge arrow
     for (const v of vertices) {
       v.display();
     }
@@ -131,4 +137,4 @@ export function sketch(p) {
 
 }
 
-export const explainText = "<p>Topological ordering of a graph is an ordering of the nodes in the graph following which all of one node's dependencies will visited before itself. The dependencies of a node are the nodes connected to it by incoming edges. Topological ordering does not exist on graphs that contain cycles</p><p>Topological sort algorithm starts at a random node and performs depth first search to visit all its neighbors and their neighbors until no unvisited node can be reached. At this point, the algorithm backtracks and adds nodes to the back of a list of ordered nodes. After backtracking is done, the algorithm pick the next unvisited node and repeat the procedure until all nodes are visited.</p>";
+export const explainText = "<p><strong>Topological ordering</strong> of a graph is an ordering of the nodes in the graph following which all of one node's dependencies will visited before itself. The dependencies of a node are the nodes connected to it by incoming edges. Topological ordering does not exist on graphs that contain cycles</p><p>Topological sort algorithm starts at a random node and performs depth first search to visit all its neighbors and their neighbors until no unvisited node can be reached. At this point, the algorithm backtracks and adds nodes to the back of a list of ordered nodes. After backtracking is done, the algorithm pick the next unvisited node and repeat the procedure until all nodes are visited.</p>";

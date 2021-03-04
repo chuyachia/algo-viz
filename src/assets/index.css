@@ -1,3 +1,7 @@
+:root {
+  --grey: rgb(154, 160, 167);
+}
+
 body {
   font-family: sans-serif;
   padding: 0;
@@ -25,9 +29,19 @@ header {
   flex: 0 1 auto;
 }
 
+.action-button {
+  background-color: var(--grey);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 #side-bar {
   flex: 0 0 15%;
-  background-color: rgb(154, 160, 167);
+  background-color: var(--grey);
   color: white;
 }
 

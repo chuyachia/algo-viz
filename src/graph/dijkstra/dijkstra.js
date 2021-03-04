@@ -12,7 +12,7 @@ export function* dijkstraSolver(startVertex, n) {
   startVertex.changeStrokeWeight(5);
   pq.add([0, startVertex]);
   dist[startVertex.id] = 0;
-  startVertex.displayValue = 0;
+  startVertex.displayValue = "0";
 
   while (pq.size() > 0) {
     let [currentWeight, currentVertex] = pq.poll();

@@ -27,6 +27,7 @@ export function sketch(p) {
   function drawButton() {
     button = p.createButton('');
     button.position(10, 40);
+    button.addClass('action-button');
   }
 
   p.draw = function () {
@@ -48,6 +49,11 @@ export function sketch(p) {
       }
     }
 
+    for (const v of vertices) {
+      v.displayEdges();
+    }
+
+    // So that vertex text will show on top of edge arrow
     for (const v of vertices) {
       v.display();
     }
@@ -143,4 +149,4 @@ export function sketch(p) {
   }
 }
 
-export const explainText = "<p>Dijkstra's algorithm finds the shortest distance from one node to all other nodes in graphs with non negative edges. It starts with a node, updates the distance to all its neighbors if the current distance to the neighbor is smaller than previously calculated distance. The current distance from a node to it's neighbor is the sum of the distance to the node and the weight of the edge leading to the neighbor.</p><p>Once all neighbors of a node are visited, the algorithm continues the same procedure with the node that is currently reachable with the shortest distance. Nodes that are already visited will not be revisited. Priority queue (binary heap) can be used to keep track of the reachable nodes and their distances. Head of the queue will have the current reachable node with the shortest distance.</p>";
+export const explainText = "<p><strong>Dijkstra's algorithm</strong> finds the shortest distance from one node to all other nodes in graphs with non negative edges. It starts with a node, updates the distance to all its neighbors if the current distance to the neighbor is smaller than previously calculated distance. The current distance from a node to it's neighbor is the sum of the distance to the node and the weight of the edge leading to the neighbor.</p><p>Once all neighbors of a node are visited, the algorithm continues the same procedure with the node that is currently reachable with the shortest distance. Nodes that are already visited will not be revisited. Priority queue (binary heap) can be used to keep track of the reachable nodes and their distances. Head of the queue will have the current reachable node with the shortest distance.</p>";
