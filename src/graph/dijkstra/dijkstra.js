@@ -10,7 +10,7 @@ export function* dijkstraSolver(startVertex, n) {
   const pq = new PriorityQueue((p1, p2) => p1[0] - p2[0]);
 
   startVertex.changeStrokeWeight(5);
-  pq.add([0, startVertex]);
+  pq.add(startVertex.id, [0, startVertex]);
   dist[startVertex.id] = 0;
   startVertex.displayValue = "0";
 
@@ -30,12 +30,22 @@ export function* dijkstraSolver(startVertex, n) {
     for (const nextEdge of currentVertex.edges) {
       let nextWeight = currentWeight + nextEdge.weight;
       let nextVertex = nextEdge.to;
+
+      if (visited[nextVertex.id]) {
+        continue;
+      }
+
       nextEdge.changeColor(RED);
       nextVertex.changeColor(BLUE);
+      
       if (dist[nextVertex.id] === undefined || nextWeight < dist[nextVertex.id]) {
         dist[nextVertex.id] = nextWeight;
         nextVertex.displayValue = nextWeight.toFixed(2);
-        pq.add([ nextWeight, nextVertex]);
+        if (pq.contains(nextVertex.id)) {
+          pq.update(nextVertex.id, [nextWeight, nextVertex]);
+        } else {
+          pq.add(nextVertex.id, [nextWeight, nextVertex]);
+        }
         path[nextVertex.id] = nextEdge;
       }
       while (shoudContinue.next().value === false) {

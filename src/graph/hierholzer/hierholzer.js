@@ -21,7 +21,6 @@ export function* hierholzer(vertices) {
   }
 
   let pathExists = true;
-  let circleExists = true;
   let startVertex, endVertex;
 
   for (let i = 0; i < n; i++ ) {
@@ -29,13 +28,11 @@ export function* hierholzer(vertices) {
     let vertexId = vertex.id;
     if (Math.abs(outDegree[vertexId] - inDegree[vertexId]) > 1)  {
       pathExists = false;
-      circleExists = false;
       break;
     } else if (Math.abs(outDegree[vertexId] - inDegree[vertexId]) === 1) {
       if (outDegree[vertexId] > inDegree[vertexId]) {
         if (startVertex === undefined) {
           startVertex = vertex;
-          circleExists = false;
         } else {
           pathExists = false;
           break;
@@ -43,7 +40,6 @@ export function* hierholzer(vertices) {
       } else {
         if (endVertex === undefined) {
           endVertex = vertex;
-          circleExists = false;
         } else {
           pathExists = false;
           break;
@@ -52,7 +48,7 @@ export function* hierholzer(vertices) {
     }
   }
 
-  if (!circleExists && !pathExists) {
+  if (!pathExists) {
     return false;
   }
 

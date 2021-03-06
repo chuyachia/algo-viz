@@ -1,5 +1,5 @@
 import { GREY, RED } from "../../util/colors";
-import { LinkedList } from "../../util/linkedList";
+import { Stack } from "../../util/stack";
 import { waitNFrame } from "../../util/waitNFrame";
 import { Edge } from "../common/edge";
 
@@ -8,8 +8,8 @@ export function* tarjan(vertices) {
   const VISITING = 1;
   const VISITED = 2;
   const state = new Array(vertices.length);
-  const visit = new LinkedList();
-  const backtrack = new LinkedList();
+  const visit = new Stack();
+  const backtrack = new Stack();
   let lowLink = 0;
 
   for (const vertex of vertices) {
@@ -19,12 +19,12 @@ export function* tarjan(vertices) {
 
     let startLowLink = lowLink;
     let seq = 0;
-    visit.addFirst({seq, edge : new Edge(0, null, vertex, 0, 0)});
-    backtrack.addFirst({seq, edge : new Edge(0, null, vertex, 0, 0)});
+    visit.push({seq, edge : new Edge(0, null, vertex, 0, 0)});
+    backtrack.push({seq, edge : new Edge(0, null, vertex, 0, 0)});
     seq++;
 
     while (visit.size() > 0) {
-      let currentEdge = visit.poll().edge;
+      let currentEdge = visit.pop().edge;
       let currentVertex = currentEdge.to;
       state[currentVertex.id] = VISITING;
       currentVertex.value = lowLink
@@ -44,8 +44,8 @@ export function* tarjan(vertices) {
       for (const edge of currentVertex.edges) {
         let nextVertex = edge.to;
         if (state[nextVertex.id] === undefined) {
-          visit.addFirst({seq, edge });
-          backtrack.addFirst({seq, edge });
+          visit.push({seq, edge });
+          backtrack.push({seq, edge });
           seq++;
         } else if (nextVertex.value >=startLowLink) {
           edge.changeColor(RED);
@@ -54,7 +54,7 @@ export function* tarjan(vertices) {
           }
           edge.changeColor(GREY);
           while (backtrack.size() > 0 && (visit.size() === 0 || backtrack.peek().seq !== visit.peek().seq)) {
-            let backtrackEdge = backtrack.poll().edge;
+            let backtrackEdge = backtrack.pop().edge;
             let backtrackVertex = backtrackEdge.to;
             state[backtrackVertex.id] = VISITED
             if (nextVertex.value < backtrackVertex.value) {
@@ -71,7 +71,7 @@ export function* tarjan(vertices) {
 
 
       while (backtrack.size() > 0  && (visit.size() === 0 || backtrack.peek().seq !== visit.peek().seq)) {
-        let backtrackEdge = backtrack.poll().edge;
+        let backtrackEdge = backtrack.pop().edge;
         let backtrackVertex = backtrackEdge.to;
         backtrackEdge.changeColor(GREY);
         state[backtrackVertex.id] = VISITED;

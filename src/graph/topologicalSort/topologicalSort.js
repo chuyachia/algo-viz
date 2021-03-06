@@ -1,5 +1,5 @@
 import { BLUE, GREY, RED } from "../../util/colors";
-import { LinkedList } from "../../util/linkedList";
+import { Stack } from "../../util/stack";
 import { waitNFrame } from "../../util/waitNFrame";
 import { Edge } from "../common/edge";
 
@@ -11,8 +11,8 @@ export function* topologicalSort(vertices) {
   const VISITED = 2;
   let hasCycle = false;
   let shoudContinue = waitNFrame(50);
-  const visit = new LinkedList();
-  const backtrack = new LinkedList();
+  const visit = new Stack();
+  const backtrack = new Stack();
   function renderDisplayValue(value) {
     if (value == undefined) {
       return 'NA';
@@ -38,12 +38,12 @@ export function* topologicalSort(vertices) {
       continue;
     }
 
-    visit.addFirst({seq, edge : new Edge(0, null, vertex, 0, 0)});
-    backtrack.addFirst({seq, edge: new Edge(0, null, vertex, 0, 0)});
+    visit.push({seq, edge : new Edge(0, null, vertex, 0, 0)});
+    backtrack.push({seq, edge: new Edge(0, null, vertex, 0, 0)});
     seq++;
 
     while (visit.size() > 0) {
-      let currentEdge = visit.poll().edge;
+      let currentEdge = visit.pop().edge;
       let current = currentEdge.to;
 
       state[current.id] = VISITING;
@@ -65,15 +65,15 @@ export function* topologicalSort(vertices) {
           break;
         }
   
-        visit.addFirst({seq, edge});
-        backtrack.addFirst({seq, edge});
+        visit.push({seq, edge});
+        backtrack.push({seq, edge});
         seq++;
       }
 
 
       while (backtrack.size() > 0 &&
        (visit.size() == 0 || visit.peek().seq != backtrack.peek().seq)) {
-        let { edge } = backtrack.poll();
+        let { edge } = backtrack.pop();
         let vertex = edge.to;
         state[vertex.id] = VISITED;
         edge.changeColor(GREY);
