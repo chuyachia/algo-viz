@@ -2,17 +2,17 @@ import { BLUE, GREY, RED } from '../../util/colors';
 import { PriorityQueue } from '../../util/priorityQueue';
 import { waitNFrame } from '../../util/waitNFrame';
 
-export function* dijkstraSolver(startVertex, n) {
+export function* dijkstraSolver(startVertex, n, waitFrame) {
   const dist = new Array(n);
   const path = new Array(n);
   const visited = new Array(n);
-  let shoudContinue = waitNFrame(50);
   const pq = new PriorityQueue((p1, p2) => p1[0] - p2[0]);
-
+  let canContinue = waitNFrame(waitFrame);
+  
   startVertex.changeStrokeWeight(5);
   pq.add(startVertex.id, [0, startVertex]);
   dist[startVertex.id] = 0;
-  startVertex.displayValue = "0";
+  startVertex.displayValue = dist[startVertex.id].toString();
 
   while (pq.size() > 0) {
     let [currentWeight, currentVertex] = pq.poll();
@@ -23,7 +23,7 @@ export function* dijkstraSolver(startVertex, n) {
     visited[currentVertex.id] = true;
     currentVertex.changeColor(RED);
 
-    while (shoudContinue.next().value === false) {
+    while (canContinue.next().value === false) {
       yield;
     }
 
@@ -40,7 +40,7 @@ export function* dijkstraSolver(startVertex, n) {
       
       if (dist[nextVertex.id] === undefined || nextWeight < dist[nextVertex.id]) {
         dist[nextVertex.id] = nextWeight;
-        nextVertex.displayValue = nextWeight.toFixed(2);
+        nextVertex.displayValue = dist[nextVertex.id].toFixed(2);
         if (pq.contains(nextVertex.id)) {
           pq.update(nextVertex.id, [nextWeight, nextVertex]);
         } else {
@@ -48,7 +48,7 @@ export function* dijkstraSolver(startVertex, n) {
         }
         path[nextVertex.id] = nextEdge;
       }
-      while (shoudContinue.next().value === false) {
+      while (canContinue.next().value === false) {
         yield;
       }
       nextEdge.changeColor(GREY);
@@ -62,4 +62,6 @@ export function* dijkstraSolver(startVertex, n) {
       edge.changeColor(BLUE);
     }
   }
+
+  return dist;
 }

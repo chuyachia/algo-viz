@@ -42,9 +42,8 @@ export function sketch(p) {
     } else if (mode == 1) {
       let state = topoSortSolver.next();
       if (state.done) {
-        mode = 2;
-      } else {
         topoOrdering = state.value;
+        mode = 2;
       }
     }
 
@@ -85,7 +84,7 @@ export function sketch(p) {
         button.show();
         button.mousePressed(function () {
           mode = 1;
-          topoSortSolver = topologicalSort(vertices);
+          topoSortSolver = topologicalSort(vertices, 50);
         });
         break;
       case 1:

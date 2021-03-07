@@ -75,7 +75,7 @@ export function sketch(p) {
         button.show();
         button.mousePressed(function () {
           mode = 1;
-          tarjanSolver = tarjan(vertices);
+          tarjanSolver = tarjan(vertices, 50);
         });
         break;
       case 1:

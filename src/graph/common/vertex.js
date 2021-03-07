@@ -16,6 +16,10 @@ export function Vertex(id, x, y, diameter, p, defaultDisplayValue) {
   let existingEdges = new Set();
 
   this.display = function() {
+    if (this.x === undefined || this.y === undefined) {
+      return;
+    }
+    
     p.push();
     p.stroke(r, b, g, 80);
     p.strokeWeight(strokeWeight);

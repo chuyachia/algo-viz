@@ -121,7 +121,7 @@ export function sketch(p) {
     startVertex = getClosestVertex(p, vertices);
 
     if (startVertex !== undefined) {
-      dSolver = dijkstraSolver(startVertex, n);
+      dSolver = dijkstraSolver(startVertex, n, 50);
       mode = 2;
     }
   }

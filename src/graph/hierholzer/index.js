@@ -41,10 +41,8 @@ export function sketch(p) {
       }
     } else if (mode == 1) {
       let state = hierholzerSolver.next();
-      console.log(state);
       if (state.done) {
         mode = 2;
-      } else {
         pathExists = state.value;
       }
     }
@@ -79,7 +77,7 @@ export function sketch(p) {
         button.show();
         button.mousePressed(function () {
           mode = 1;
-          hierholzerSolver = hierholzer(vertices);
+          hierholzerSolver = hierholzer(vertices, 50);
         });
         break;
       case 1:

@@ -3,8 +3,8 @@ import { LinkedList } from "../../util/linkedList";
 import { waitNFrame } from "../../util/waitNFrame";
 import { Edge } from "../common/edge";
 
-export function* hierholzer(vertices) {
-  let shoudContinue = waitNFrame(50);
+export function* hierholzer(vertices, waitFrame) {
+  let canContinue = waitNFrame(waitFrame);
   let n = vertices.length;
   let edgeCount = 0;
   let inDegree = new Array(n);
@@ -20,6 +20,7 @@ export function* hierholzer(vertices) {
     }
   }
 
+  const visitOrder = new Array(edgeCount + 1);
   let pathExists = true;
   let startVertex, endVertex;
 
@@ -65,8 +66,8 @@ export function* hierholzer(vertices) {
     currentVertex = nextEdge.to;
     stack.addFirst(nextEdge);
     
-    while (shoudContinue.next().value === false) {
-      yield true;
+    while (canContinue.next().value === false) {
+      yield;
     }
 
     while (outDegree[currentVertex.id] === 0) {
@@ -74,14 +75,15 @@ export function* hierholzer(vertices) {
       let backtrackVertex = backtrackEdge.to;
       backtrackEdge.changeColor(BLUE);
       backtrackVertex.changeColor(BLUE);
-      while (shoudContinue.next().value === false) {
-        yield true;
+      while (canContinue.next().value === false) {
+        yield;
       }
-      if (backtrackVertex.displayValue.length > 0) {
+      if (backtrackVertex.displayValue && backtrackVertex.displayValue.length > 0) {
         backtrackVertex.displayValue += ','+ edgeCount;
       } else {
         backtrackVertex.displayValue = edgeCount.toString();
       }
+      visitOrder[edgeCount] = backtrackVertex.id;
       edgeCount--;
       if (stack.size() > 0) {
         currentVertex = stack.peek().to;
@@ -90,6 +92,6 @@ export function* hierholzer(vertices) {
         break;
       }
     }
-
   }
+  return visitOrder;
 }

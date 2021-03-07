@@ -3,11 +3,12 @@ import { Stack } from "../../util/stack";
 import { waitNFrame } from "../../util/waitNFrame";
 import { Edge } from "../common/edge";
 
-export function* tarjan(vertices) {
-  let shoudContinue = waitNFrame(50);
+export function* tarjan(vertices, waitFrame) {
+  let canContinue = waitNFrame(waitFrame);
   const VISITING = 1;
   const VISITED = 2;
   const state = new Array(vertices.length);
+  const group = new Array(vertices.length);
   const visit = new Stack();
   const backtrack = new Stack();
   let lowLink = 0;
@@ -28,6 +29,7 @@ export function* tarjan(vertices) {
       let currentVertex = currentEdge.to;
       state[currentVertex.id] = VISITING;
       currentVertex.value = lowLink
+      group[currentVertex.id] = lowLink;
       currentVertex.displayValue = `group ${lowLink++}`;  
       const randomColorObject = {
         r: Math.floor(Math.random() * 256),
@@ -37,7 +39,7 @@ export function* tarjan(vertices) {
       
       currentEdge.changeColor(RED);
       currentVertex.changeColor(randomColorObject);
-      while (shoudContinue.next().value === false) {
+      while (canContinue.next().value === false) {
         yield;
       }
 
@@ -49,7 +51,7 @@ export function* tarjan(vertices) {
           seq++;
         } else if (nextVertex.value >=startLowLink) {
           edge.changeColor(RED);
-          while (shoudContinue.next().value === false) {
+          while (canContinue.next().value === false) {
             yield;
           }
           edge.changeColor(GREY);
@@ -58,11 +60,13 @@ export function* tarjan(vertices) {
             let backtrackVertex = backtrackEdge.to;
             state[backtrackVertex.id] = VISITED
             if (nextVertex.value < backtrackVertex.value) {
+              backtrackVertex.value = nextVertex.value;
               backtrackVertex.displayValue =nextVertex.displayValue;
+              group[backtrackVertex.id] = group[nextVertex.id];
               backtrackVertex.changeColor(nextVertex.getColor());
             }
             backtrackEdge.changeColor(GREY);
-            while (shoudContinue.next().value === false) {
+            while (canContinue.next().value === false) {
               yield;
             }
           }
@@ -75,11 +79,13 @@ export function* tarjan(vertices) {
         let backtrackVertex = backtrackEdge.to;
         backtrackEdge.changeColor(GREY);
         state[backtrackVertex.id] = VISITED;
-        while (shoudContinue.next().value === false) {
+        while (canContinue.next().value === false) {
           yield;
         }
       }
 
     }
   }
+
+  return group;
 }

@@ -3,14 +3,14 @@ import { Stack } from "../../util/stack";
 import { waitNFrame } from "../../util/waitNFrame";
 import { Edge } from "../common/edge";
 
-export function* topologicalSort(vertices) {
+export function* topologicalSort(vertices, waitFrame) {
   const state = [];
   const sorted = [];
   let sortedIndex = vertices.length;
   const VISITING = 1;
   const VISITED = 2;
   let hasCycle = false;
-  let shoudContinue = waitNFrame(50);
+  let canContinue = waitNFrame(waitFrame);
   const visit = new Stack();
   const backtrack = new Stack();
   function renderDisplayValue(value) {
@@ -50,8 +50,8 @@ export function* topologicalSort(vertices) {
       currentEdge.changeColor(RED);
       current.changeColor(RED);
 
-      while (shoudContinue.next().value === false) {
-        yield hasCycle ? [] : sorted;
+      while (canContinue.next().value === false) {
+        yield;
       }
 
       for (const edge of current.edges) {
@@ -80,10 +80,12 @@ export function* topologicalSort(vertices) {
         vertex.changeColor(BLUE);
         vertex.displayValue = renderDisplayValue(sortedIndex);
         sorted[--sortedIndex] = vertex.id;
-        while (shoudContinue.next().value === false) {
-          yield hasCycle ? [] : sorted;
+        while (canContinue.next().value === false) {
+          yield;
         }
       }
     }
   }
+
+  return hasCycle ? [] : sorted;
 }
