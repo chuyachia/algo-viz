@@ -1,13 +1,13 @@
 import { GREY } from '../../util/colors';
 import { Edge } from './edge';
 
-export function Vertex(id, x, y, diameter, p, defaultDisplayValue) {
+export function Vertex(id, x, y, diameter, p) {
   this.id = id;
   this.x = x;
   this.y = y;
   this.edges = [];
   this.value;
-  this.displayValue = defaultDisplayValue;
+  this.displayValue;
 
   let r = GREY.r;
   let b = GREY.b;

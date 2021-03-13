@@ -22,10 +22,11 @@ export function Edge(weight, from, to, vertexDiameter, p, directed) {
   }
 
   this.drawUndirectedEdge = function() {
+    var angle = p.atan2(this.from.y - this.to.y, this.from.x - this.to.x);
     p.push();
     p.stroke(r, g, b);
     p.strokeWeight(this.weight);
-    p.line(this.from.x, this.from.y, this.to.x , this.to.y);
+    p.line(this.from.x, this.from.y, this.to.x + vertexDiameter/2 * p.cos(angle), this.to.y + vertexDiameter/2 * p.sin(angle));
     p.pop(); 
   }
 
@@ -34,7 +35,7 @@ export function Edge(weight, from, to, vertexDiameter, p, directed) {
     p.push();
     p.stroke(r, g, b);
     p.strokeWeight(this.weight);
-    p.line(this.from.x, this.from.y, this.to.x, this.to.y);
+    p.line(this.from.x, this.from.y, this.to.x + vertexDiameter * p.cos(angle), this.to.y + vertexDiameter * p.sin(angle));
     p.pop();
 
     p.push();

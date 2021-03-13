@@ -6,16 +6,15 @@ import './assets/index.css';
   const sidebar = document.querySelector('#side-bar');
   const p5Container = document.querySelector('#p5-container');
   const explain = document.querySelector('#explain');
+  let canvas;
 
   async function dynamicLoadModule(path) {
-    let module = await import(`./graph/${path}`);
-
+    let module = await import(`./modules/${path}`);
     const { sketch, explainText } = module;
     canvas = new p5(sketch, 'p5-container');
     explain.innerHTML = explainText;
   }
 
-  let canvas;
   sidebar.addEventListener('click', async function (e) {
     let target = e.target;
     if (target.nodeName === 'H5') {
@@ -27,16 +26,19 @@ import './assets/index.css';
       p5Container.innerHTML = '';
       switch (target.id) {
         case 'dijkstra':
-          await dynamicLoadModule('dijkstra');
+          await dynamicLoadModule('graph/dijkstra');
           break;
         case 'topo-sort':
-          await dynamicLoadModule('topologicalSort');
+          await dynamicLoadModule('graph/topologicalSort');
           break;
         case 'tarjan':
-          await dynamicLoadModule('tarjan');
+          await dynamicLoadModule('graph/tarjan');
           break;
         case 'hierholzer':
-          await dynamicLoadModule('hierholzer');
+          await dynamicLoadModule('graph/hierholzer');
+          break;
+        case 'binary-search':
+          await dynamicLoadModule('tree/binarySearchTree');
           break;
       }
     }
