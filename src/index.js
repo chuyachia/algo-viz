@@ -40,6 +40,9 @@ import './assets/index.css';
         case 'binary-search':
           await dynamicLoadModule('tree/binarySearchTree');
           break;
+        case 'avl':
+          await dynamicLoadModule('tree/avlTree');
+          break;
       }
     }
   });

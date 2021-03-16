@@ -33,10 +33,10 @@ test('Remove works correctly 2', () => {
   bst.insert(17);
   bst.remove(15);
   bst.insert(36);
-  expect(checkCheckInvariant(bst.root)).toBe(true);
+  expect(checkInvariant(bst.root)).toBe(true);
 })
 
-function checkCheckInvariant(root) {
+function checkInvariant(root) {
   if (root === undefined) {
     return true;
   }
@@ -54,5 +54,5 @@ function checkCheckInvariant(root) {
     return false;
   }
 
-  return checkCheckInvariant(root.rightChild) && checkCheckInvariant(root.leftChild);
+  return checkInvariant(root.rightChild) && checkInvariant(root.leftChild);
 }

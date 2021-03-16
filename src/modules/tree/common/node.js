@@ -7,6 +7,10 @@ export function Node(value, diameter, p) {
   this.leftChildEdge;
   this.rightChildEdge;
   this.strokeWeight = 0;
+  this.height = 0;
+  this.balanceFactor = 0;
+  this.showLeftRotationArrow = false;
+  this.showRightRotationArrow = false;
 
   this.index;
   this.x;
@@ -29,6 +33,39 @@ export function Node(value, diameter, p) {
     p.fill(0,0,0);
     p.textAlign(p.CENTER);
     p.text(this.value , this.x, this.y);
+    p.pop();
+    if (this.showRightRotationArrow) {
+      this.rightArrow();
+    }
+    if (this.showLeftRotationArrow) {
+      this.leftArrow();
+    }
+  }
+
+  this.removeArrow = function() {
+    this.showLeftRotationArrow = false;
+    this.showRightRotationArrow = false;
+  }
+
+   this.rightArrow = function() {
+    let arcDiameter = diameter + 15;
+    p.push();
+    p.noFill();
+    p.arc(this.x, this.y, arcDiameter, arcDiameter, p.PI, p.TWO_PI);
+    let triangleCenter = this.x + arcDiameter/2;
+    p.triangle(triangleCenter, this.y + 10, triangleCenter-5, this.y, triangleCenter+5, this.y);
+    p.stroke(0,0,0);
+    p.pop();
+  }
+
+  this.leftArrow = function() {
+    let arcDiameter = diameter + 15;
+    p.push();
+    p.noFill();
+    p.arc(this.x, this.y, arcDiameter, arcDiameter, p.PI, p.TWO_PI);
+    let triangleCenter = this.x - arcDiameter/2;
+    p.triangle(triangleCenter, this.y + 10, triangleCenter-5, this.y, triangleCenter+5, this.y);
+    p.stroke(0,0,0);
     p.pop();
   }
 

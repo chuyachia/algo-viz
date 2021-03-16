@@ -22,7 +22,6 @@ export function BinarySearchTree(vertexDiameter, waitFrame, p) {
     const newNode = new Node(value, vertexDiameter, p);
     let prev;
     let current = this.root;
-    // let rtn = root;
 
     while (current !== undefined) {
       prev = current;
@@ -76,7 +75,6 @@ export function BinarySearchTree(vertexDiameter, waitFrame, p) {
 
   this.iteRemove = function* (target) {
     let prev;
-    // let rtn = root;
     let current = this.root;
     let isRightChild;
     while (current !== undefined) {
@@ -116,8 +114,6 @@ export function BinarySearchTree(vertexDiameter, waitFrame, p) {
         }
       }
     }
-
-    // return rtn;
   }
 
   function recRemove(root, value) {
