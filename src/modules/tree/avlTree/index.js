@@ -14,7 +14,7 @@ export function sketch(p) {
   let removeGenerator;
   let removing;
 
-  let tree = new AVLTree(vertexDiameter, 40, p);
+  let tree = new AVLTree(vertexDiameter, 50, p);
   let inputElement;
 
   p.setup = function () {

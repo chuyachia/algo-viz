@@ -37,6 +37,7 @@ export function AVLTree(vertexDiameter, waitFrame, p) {
         yield;
       }
       current.changeColor(GREY);
+
       backtrack.push(current);
       if (value > current.value) {
         current = current.rightChild;
@@ -46,16 +47,12 @@ export function AVLTree(vertexDiameter, waitFrame, p) {
         return;
       }
     }
+
     const newNode = new Node(value, vertexDiameter, p);
 
     let prev = newNode;
     while (backtrack.size() > 0) {
       current = backtrack.pop();
-      current.changeColor(RED);
-      while (canContinue.next().value === false) {
-        yield;
-      }
-      current.changeColor(GREY);
       if (prev !== undefined) {
         if (prev.value < current.value) {
           current.leftChild = prev;
@@ -63,17 +60,16 @@ export function AVLTree(vertexDiameter, waitFrame, p) {
           current.rightChild = prev;
         }
       }
+
       updateHeight(current);
-      current = balance(current);
-      while (canContinue.next().value === false) {
+      let balanceGen = balance(current);
+      let state;
+      while (state === undefined || !state.done) {
+        state = balanceGen.next();
         yield;
       }
-      if (current.leftChild !== undefined) {
-        current.leftChild.removeArrow();
-      }
-      if (current.rightChild !== undefined) {
-        current.rightChild.removeArrow();
-      }
+
+      current = state.value;
       prev = current;
     }
 
@@ -85,12 +81,12 @@ export function AVLTree(vertexDiameter, waitFrame, p) {
     let current = this.root;
     let prev;
 
-    current.changeColor(RED);
-    while (canContinue.next().value === false) {
-      yield;
-    }
-    current.changeColor(GREY);
     while (current !== undefined) {
+      current.changeColor(RED);
+      while (canContinue.next().value === false) {
+        yield;
+      }
+      current.changeColor(GREY);
 
       if (value > current.value) {
         backtrack.push(current);
@@ -124,11 +120,6 @@ export function AVLTree(vertexDiameter, waitFrame, p) {
 
     while (backtrack.size() > 0) {
       current = backtrack.pop();
-      current.changeColor(RED);
-      while (canContinue.next().value === false) {
-        yield;
-      }
-      current.changeColor(GREY);
       if (prev !== undefined) {
         if (prev.value > current.value) {
           current.rightChild = prev;
@@ -136,17 +127,16 @@ export function AVLTree(vertexDiameter, waitFrame, p) {
           current.leftChild = prev;
         }
       }
+
       updateHeight(current);
-      current = balance(current);
-      while (canContinue.next().value === false) {
+      let balanceGen = balance(current);
+      let state;
+      while (state === undefined || !state.done) {
+        state = balanceGen.next();
         yield;
       }
-      if (current.leftChild !== undefined) {
-        current.leftChild.removeArrow();
-      }
-      if (current.rightChild !== undefined) {
-        current.rightChild.removeArrow();
-      }
+
+      current = state.value;
       prev = current;
     }
 
@@ -173,30 +163,81 @@ export function AVLTree(vertexDiameter, waitFrame, p) {
     root.balanceFactor = rightHeight - leftHeight;
   }
 
-  function balance(root) {
+  function * balance(root) {
+    root.changeColor(RED);
+    while (canContinue.next().value === false) {
+      yield;
+    }
     if (root.balanceFactor > 1) {
       if (root.rightChild.balanceFactor >= 0) {
         // right right case
+        root.changeColor(RED);
         root.showLeftRotationArrow = true;
+        while (canContinue.next().value === false) {
+          yield;
+        }
+        root.showLeftRotationArrow = false;
+        root.changeColor(GREY);
+
         return leftRotation(root);
       } else {
         // right left case
+        root.rightChild.changeColor(RED);
+        root.rightChild.showRightRotationArrow = true;
+        while (canContinue.next().value === false) {
+          yield;
+        }
+        root.rightChild.changeColor(GREY);
+        root.rightChild.showRightRotationArrow = false;
+        
         root.rightChild = rightRotation(root.rightChild);
+
+        root.changeColor(RED);
         root.showLeftRotationArrow = true;
+        while (canContinue.next().value === false) {
+          yield;
+        }
+        root.showLeftRotationArrow = false;
+        root.changeColor(GREY);
+
         return leftRotation(root);
       }
     } else if (root.balanceFactor < -1) {
       if (root.leftChild.balanceFactor <= 0) {
         // left left case
+        root.changeColor(RED);
         root.showRightRotationArrow = true;
+        while (canContinue.next().value === false) {
+          yield;
+        }
+        root.showRightRotationArrow = false;
+        root.changeColor(GREY);
+
         return rightRotation(root);
       } else {
         // left right case
+        root.leftChild.changeColor(RED);
+        root.leftChild.showLeftRotationArrow = true;
+        while (canContinue.next().value === false) {
+          yield;
+        }
+        root.leftChild.showLeftRotationArrow = false;
+        root.leftChild.changeColor(GREY);
+
         root.leftChild = leftRotation(root.leftChild);
+
+        root.changeColor(RED);
         root.showRightRotationArrow = true;
+        while (canContinue.next().value === false) {
+          yield;
+        }
+        root.showRightRotationArrow = false;
+        root.changeColor(GREY);
+
         return rightRotation(root);
       }
     }
+    root.changeColor(GREY);
 
     return root;
   }
