@@ -1,18 +1,18 @@
 export const RED = {
   r: 254,
-  g: 160,
-  b: 144,
+  g: 144,
+  b: 160,
 }
 
 export const BLUE = {
   r: 89,
-  g: 199,
-  b: 235,
+  g: 235,
+  b: 199,
 }
 
 
 export const GREY = {
   r: 154,
-  g: 160,
-  b: 167,
+  g: 167,
+  b: 160,
 }

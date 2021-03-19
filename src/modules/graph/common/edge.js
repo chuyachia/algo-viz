@@ -6,8 +6,8 @@ export function Edge(weight, from, to, vertexDiameter, p, directed) {
   this.to = to;
   
   let r = GREY.r;
-  let b = GREY.b;
   let g = GREY.g;
+  let b = GREY.b;
 
   this.display = function() {
     if (this.from == null || this.to == null) {

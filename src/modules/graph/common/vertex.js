@@ -10,8 +10,8 @@ export function Vertex(id, x, y, diameter, p) {
   this.displayValue;
 
   let r = GREY.r;
-  let b = GREY.b;
   let g = GREY.g;
+  let b = GREY.b;
   let strokeWeight = 0;
   let existingEdges = new Set();
 
@@ -21,9 +21,9 @@ export function Vertex(id, x, y, diameter, p) {
     }
     
     p.push();
-    p.stroke(r, b, g, 80);
+    p.stroke(r, g, b, 80);
     p.strokeWeight(strokeWeight);
-    p.fill(r, b, g);
+    p.fill(r, g, b);
     p.circle(this.x, this.y, diameter);
     p.fill(0,0,0);
     p.strokeWeight(0);

@@ -60,15 +60,15 @@ export function sketch(p) {
   function showLabels() {
     p.push();
     p.strokeWeight(0);
-    p.fill(GREY.r, GREY.b, GREY.g);
+    p.fill(GREY.r, GREY.g, GREY.b);
     p.circle(vertexDiameter, canvasHeight - vertexDiameter, vertexDiameter);
     p.textAlign(p.LEFT);
     p.fill(0, 0, 0);
     p.text("ID : order", 2 * vertexDiameter, canvasHeight - vertexDiameter);
-    p.fill(RED.r, RED.b, RED.g);
+    p.fill(RED.r, RED.g, RED.b);
     p.circle(vertexDiameter, canvasHeight - 2 * vertexDiameter, vertexDiameter);
     p.text("Visiting", 2 * vertexDiameter, canvasHeight - 2 * vertexDiameter);
-    p.fill(BLUE.r, BLUE.b, BLUE.g);
+    p.fill(BLUE.r, BLUE.g, BLUE.b);
     p.circle(vertexDiameter, canvasHeight - 3 * vertexDiameter, vertexDiameter);
     p.text("Visited", 2 * vertexDiameter, canvasHeight - 3 * vertexDiameter);
     p.pop();
@@ -79,7 +79,7 @@ export function sketch(p) {
     switch (mode) {
       case 0:
         p.text('Click on nodes to add link.\n' +
-          'Once the graph is done, click on the button to find topological ordering of the nodes', 10, 10);
+          'Once the graph is done, click on the button to find the topological ordering of the nodes', 10, 10);
         button.html('Find topological ordering');
         button.show();
         button.mousePressed(function () {

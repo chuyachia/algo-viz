@@ -60,7 +60,7 @@ export function sketch(p) {
   function showLabels() {
     p.push();
     p.strokeWeight(0);
-    p.fill(GREY.r, GREY.b, GREY.g);
+    p.fill(GREY.r, GREY.g, GREY.b);
     p.circle(vertexDiameter, canvasHeight - vertexDiameter, vertexDiameter);
     p.textAlign(p.LEFT);
     p.fill(0, 0, 0);
@@ -72,7 +72,7 @@ export function sketch(p) {
     switch (mode) {
       case 0:
         p.text('Click on nodes to add link.\n' +
-          'Once the graph is done, click on the button to find Eulerian path', 10, 10);
+          'Once the graph is done, click on the button to find the Eulerian path', 10, 10);
         button.html('Find Eulerian path');
         button.show();
         button.mousePressed(function () {
@@ -130,4 +130,4 @@ export function sketch(p) {
 
 }
 
-export const explainText = "<p><strong>Hierholzer's algorithm</strong> finds Eulerian path in a graph. Eulerian path is a route in a graph following which every edge in the graph will be visited exactly once. Eulerian cycle is a Eulerian path whose start node is the same as the end node. When Eulerian cycle exits in a graph, an Eulerian path can be found starting at any node.</p><p>On a directed graph, Eulerian path only exists if at most one node has out degree - in degree = 1 and at most one node has in degree - out degree = 1. If all nodes have the same in degree and out degree, Eulerian cycle exists on the graph.</p><p>After checking the existence of Eulerian path, Hierholzer's algorithm starts at the node whose out degree - in degree = 1, or at any node in case of Eularian cycle. The algorithm tracks the remaining out degree of every node and decrement the remaining out degree of the current node. It then visits the neighbor of the current node in depth first search. When visiting a node with out degree = 0, the algorithm backtracks and add the node to the back of Eulerian path.</p>"
+export const explainText = "<p><strong>Hierholzer's algorithm</strong> finds Eulerian path in a graph. Eulerian path is a route in a graph following which every edge in the graph will be visited exactly once. Eulerian cycle is a Eulerian path whose start node is the same as the end node. When Eulerian cycle exits in a graph, an Eulerian path can be found starting at any node.</p><p>On a directed graph, Eulerian path only exists if at most one node has out degree - in degree = 1 and at most one node has in degree - out degree = 1. If all nodes have the same in degree and out degree, Eulerian cycle exists on the graph.</p><p>After checking the existence of Eulerian path, Hierholzer's algorithm starts at the node whose out degree - in degree = 1, or at any node in case of Eularian cycle. The algorithm tracks the remaining out degree of every node and decrements the remaining out degree of the current node. It then visits the neighbor of the current node in depth first search. When visiting a node with an out degree = 0, the algorithm backtracks and add the node to the back of Eulerian path.</p>"

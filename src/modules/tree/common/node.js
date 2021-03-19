@@ -17,8 +17,8 @@ export function Node(value, diameter, p) {
   this.y;
 
   let r = GREY.r;
-  let b = GREY.b;
   let g = GREY.g;
+  let b = GREY.b;
 
   this.display = function() {
     if (this.x === undefined || this.y === undefined) {
@@ -26,9 +26,9 @@ export function Node(value, diameter, p) {
     }
 
     p.push();
-    p.stroke(r, b, g, 80);
+    p.stroke(r, g, b);
     p.strokeWeight(this.strokeWeight);
-    p.fill(r, b, g);
+    p.fill(r,g, b);
     p.circle(this.x, this.y, diameter);
     p.fill(0,0,0);
     p.textAlign(p.CENTER);
@@ -51,10 +51,10 @@ export function Node(value, diameter, p) {
     let arcDiameter = diameter + 15;
     p.push();
     p.noFill();
+    p.stroke(GREY.r, GREY.g, GREY.b);
     p.arc(this.x, this.y, arcDiameter, arcDiameter, p.PI, p.TWO_PI);
     let triangleCenter = this.x + arcDiameter/2;
     p.triangle(triangleCenter, this.y + 10, triangleCenter-5, this.y, triangleCenter+5, this.y);
-    p.stroke(0,0,0);
     p.pop();
   }
 
@@ -62,10 +62,10 @@ export function Node(value, diameter, p) {
     let arcDiameter = diameter + 15;
     p.push();
     p.noFill();
+    p.stroke(GREY.r, GREY.g, GREY.b);
     p.arc(this.x, this.y, arcDiameter, arcDiameter, p.PI, p.TWO_PI);
     let triangleCenter = this.x - arcDiameter/2;
     p.triangle(triangleCenter, this.y + 10, triangleCenter-5, this.y, triangleCenter+5, this.y);
-    p.stroke(0,0,0);
     p.pop();
   }
 
