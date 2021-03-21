@@ -22,11 +22,15 @@ export function* hierholzer(vertices, waitFrame) {
 
   const visitOrder = new Array(edgeCount + 1);
   let pathExists = true;
-  let startVertex, endVertex;
+  let startVertex, endVertex, linkedVertex;
 
   for (let i = 0; i < n; i++ ) {
     let vertex = vertices[i];
     let vertexId = vertex.id;
+    if (outDegree[vertexId] > 0) {
+      linkedVertex = vertex;
+    }
+
     if (Math.abs(outDegree[vertexId] - inDegree[vertexId]) > 1)  {
       pathExists = false;
       break;
@@ -53,7 +57,7 @@ export function* hierholzer(vertices, waitFrame) {
     return false;
   }
 
-  let currentVertex = startVertex || vertices[0];
+  let currentVertex = startVertex || linkedVertex;
   const stack = new LinkedList();
   stack.addFirst(new Edge(0, null, currentVertex, 0, 0));
 
@@ -93,5 +97,6 @@ export function* hierholzer(vertices, waitFrame) {
       }
     }
   }
+
   return visitOrder;
 }

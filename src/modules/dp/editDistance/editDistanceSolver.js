@@ -4,11 +4,7 @@ import { waitNFrame } from "../../util/waitNFrame";
 export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame) {
   const canContinue = waitNFrame(waitFrame);
   if (grid === undefined || grid[0] === undefined) {
-    return;
-  }
-
-  if (grid.length !== toCharArray.length || grid[0].length !== fromCharArray.length) {
-    return;
+    throw 'grid must be 2D array';
   }
 
   const n = grid.length;
@@ -18,9 +14,8 @@ export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame)
   for (let i = 0;i < m;i++) {
     grid[0][i].value = i;
     if (i > 0) {
-      prev[0][i] = prev[0][i-1];
+      prev[0][i] = [0, i-1];
     }
-    prev[0][i]
 
     grid[0][i].changeColor(RED);
     while (canContinue.next().value === false) {
@@ -32,7 +27,7 @@ export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame)
   for (let i = 0;i < n;i++) {
     grid[i][0].value = i;
     if (i > 0) {
-      prev[i][0] = prev[i-1][0];
+      prev[i][0] = [i-1, 0];
     }
 
     grid[i][0].changeColor(RED);
@@ -48,6 +43,7 @@ export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame)
       while (canContinue.next().value === false) {
         yield;
       }
+
       if (fromCharArray[j] === toCharArray[i]) {
         grid[i][j].value = grid[i - 1][j - 1].value;
         prev[i][j] = [i - 1, j - 1];
@@ -57,30 +53,33 @@ export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame)
           yield;
         }
         grid[i - 1][j -1].changeColor(GREY);
-
       } else {
-        let minPrev = Math.min(grid[i - 1][j - 1].value, Math.min(grid[i - 1][j].value, grid[i][j - 1].value));
-        if (minPrev === grid[i - 1][j - 1].value) {
-          prev[i][j] = [i - 1, j - 1];
-          grid[i - 1][j - 1].changeColor(BLUE);
-          while (canContinue.next().value === false) {
-            yield;
-          }
-          grid[i - 1][j - 1].changeColor(GREY);
-        } else if (minPrev === grid[i - 1][j].value) {
+        let minPrev = Math.min(grid[i][j - 1].value, Math.min(grid[i - 1][j].value, grid[i-1][j - 1].value));
+
+        if (minPrev === grid[i - 1][j].value) {
           prev[i][j] = [i - 1, j];
+
           grid[i - 1][j].changeColor(BLUE);
           while (canContinue.next().value === false) {
             yield;
           }
           grid[i - 1][j].changeColor(GREY);
-        } else {
+        } else if (minPrev === grid[i][j -1].value) {
           prev[i][j] = [i, j - 1];
+
           grid[i][j - 1].changeColor(BLUE);
           while (canContinue.next().value === false) {
             yield;
           }
           grid[i][j - 1].changeColor(GREY);
+        }  else {
+          prev[i][j] = [i - 1, j - 1];
+
+          grid[i - 1][j - 1].changeColor(BLUE);
+          while (canContinue.next().value === false) {
+            yield;
+          }
+          grid[i - 1][j - 1].changeColor(GREY);
         }
         grid[i][j].value = minPrev + 1;
       }
@@ -92,27 +91,45 @@ export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame)
   let i = n-1;
   let j = m-1;
   let res = [];
-  let edit = [...fromCharArray];
-  res.push(edit.join(''));
+  let steps = [];
 
   while (prev[i][j] !== undefined) {
     grid[i][j].changeColor(RED);
+
+    steps.unshift([i, j]);
     let prevCoord = prev[i][j];
-    if (prevCoord[0] === i-1 && prevCoord[1] === j-1) {
-      if (edit[j] !== toCharArray[i]) {
-        edit[j] = toCharArray[i];
-        res.push(edit.join(''));
-      }
-    } else if (prevCoord[0] === i-1) {
-      edit[i] = toCharArray[i];
-      res.push(edit.join(''));
-    } else {
-      edit[j] = '';
-      res.push(edit.join(''));
-    }
     i = prevCoord[0];
     j = prevCoord[1];
+  }
 
+  let edit = [...fromCharArray];
+  edit.splice(0, 1);
+  let editDone = [];
+  res.push(edit.join(''));
+  i = 0;
+  j = 0;
+  for (let s of steps) {
+    let ni = s[0];
+    let nj = s[1];
+    if (ni === i+1 && nj === j+1) {
+      editDone.push(edit.splice(0, 1));
+
+      if (grid[ni][nj].value > grid[i][j].value) {
+        editDone[editDone.length - 1] = toCharArray[ni];
+        res.push(editDone.join('')+edit.join(''));
+      }
+    } else if (ni === i+1) {
+      editDone.push(toCharArray[ni]);
+
+      res.push(editDone.join('')+edit.join(''));
+    } else {
+      editDone.push(edit.splice(0, 1));
+
+      editDone.splice(editDone.length-1, 1);
+      res.push(editDone.join('')+edit.join(''));
+    }
+    i = ni;
+    j = nj;
   }
 
   return res;

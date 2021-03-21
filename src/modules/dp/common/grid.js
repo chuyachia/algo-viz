@@ -49,6 +49,4 @@ export function Grid(startX, startY, p) {
 
     return new Cell(xCoord, yCoord, cellWidth, cellHeight, value, p);
   }
-
-
 }
