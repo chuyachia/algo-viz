@@ -1,6 +1,6 @@
 import { GREY } from '../../util/colors';
 
-export function Node(value, diameter, p) {
+export function Node(value) {
   this.value = value;
   this.leftChild;
   this.rightChild;
@@ -20,7 +20,7 @@ export function Node(value, diameter, p) {
   let g = GREY.g;
   let b = GREY.b;
 
-  this.display = function() {
+  this.display = function(p, diameter) {
     if (this.x === undefined || this.y === undefined) {
       return;
     }
@@ -35,10 +35,10 @@ export function Node(value, diameter, p) {
     p.text(this.value , this.x, this.y);
     p.pop();
     if (this.showRightRotationArrow) {
-      this.rightArrow();
+      this.rightArrow(p, diameter);
     }
     if (this.showLeftRotationArrow) {
-      this.leftArrow();
+      this.leftArrow(p, diameter);
     }
   }
 
@@ -47,7 +47,7 @@ export function Node(value, diameter, p) {
     this.showRightRotationArrow = false;
   }
 
-   this.rightArrow = function() {
+   this.rightArrow = function(p, diameter) {
     let arcDiameter = diameter + 15;
     p.push();
     p.noFill();
@@ -58,7 +58,7 @@ export function Node(value, diameter, p) {
     p.pop();
   }
 
-  this.leftArrow = function() {
+  this.leftArrow = function(p, diameter) {
     let arcDiameter = diameter + 15;
     p.push();
     p.noFill();

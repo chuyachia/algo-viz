@@ -14,7 +14,7 @@ export function sketch(p) {
   let removeGenerator;
   let removing;
 
-  let tree = new BinarySearchTree(vertexDiameter, 30, p);
+  let tree = new BinarySearchTree(30);
   let inputElement;
 
   p.setup = function () {
@@ -110,7 +110,7 @@ export function sketch(p) {
     const { x, y } = getCoordinate(root.index);
     root.x = x;
     root.y = y;
-    root.display();
+    root.display(p, vertexDiameter);
 
     if (root.leftChild !== undefined) {
       root.leftChild.index = 2 * root.index;

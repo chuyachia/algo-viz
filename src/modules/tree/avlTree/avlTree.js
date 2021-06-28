@@ -3,7 +3,7 @@ import { Stack } from '../../util/stack';
 import { waitNFrame } from '../../util/waitNFrame';
 import { Node } from '../common/node';
 
-export function AVLTree(vertexDiameter, waitFrame, p) {
+export function AVLTree(waitFrame) {
   this.root;
 
   let canContinue = waitNFrame(waitFrame);
@@ -48,7 +48,7 @@ export function AVLTree(vertexDiameter, waitFrame, p) {
       }
     }
 
-    const newNode = new Node(value, vertexDiameter, p);
+    const newNode = new Node(value);
 
     let prev = newNode;
     while (backtrack.size() > 0) {
