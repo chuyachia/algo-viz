@@ -1,12 +1,11 @@
 import { GREY, RED } from "../../util/colors";
-import { waitNFrame } from "../../util/waitNFrame";
+import { BaseTree } from "../common/baseTree";
 import { Node } from "../common/node";
 
+BinarySearchTree.prototype = Object.create(BaseTree.prototype);
+
 export function BinarySearchTree(waitFrame) {
-
-  this.root;
-
-  let canContinue = waitNFrame(waitFrame);
+  BaseTree.call(this, waitFrame);
 
   this.insert = function (value) {
     let insertGenerator = this.iteInsert(value);
@@ -22,7 +21,7 @@ export function BinarySearchTree(waitFrame) {
     while (current !== undefined) {
       prev = current;
       current.changeColor(RED);
-      while (!canContinue.next().value) {
+      while (!this.canContinue.next().value) {
         yield;
       }
       current.changeColor(GREY);
@@ -57,7 +56,7 @@ export function BinarySearchTree(waitFrame) {
     let isRightChild;
     while (current !== undefined) {
       current.changeColor(RED);
-      while (!canContinue.next().value) {
+      while (!this.canContinue.next().value) {
         yield;
       }
       current.changeColor(GREY);

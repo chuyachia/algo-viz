@@ -1,19 +1,54 @@
+import { Edge } from '../../graph/common/edge';
 import { GREY } from '../../util/colors';
 
 export function Node(value) {
+  /**
+   * @type {number}
+   */
   this.value = value;
+  /**
+   * @type {Node}
+   */
   this.leftChild;
+  /**
+   * @type {Node}
+   */
   this.rightChild;
+  /**
+   * @type {Edge}
+   */
   this.leftChildEdge;
+  /**
+   * @type {Edge}
+   */
   this.rightChildEdge;
+  /**
+   * @type {number}
+   */
   this.strokeWeight = 0;
+  /**
+   * @type {number}
+   */
   this.height = 0;
-  this.balanceFactor = 0;
+  /**
+   * @type {boolean}
+   */
   this.showLeftRotationArrow = false;
+  /**
+   * @type {boolean}
+   */
   this.showRightRotationArrow = false;
-
+  /**
+   * @type {number}
+   */
   this.index;
+  /**
+   * @type {number}
+   */
   this.x;
+  /**
+   * @type {number}
+   */
   this.y;
 
   let r = GREY.r;

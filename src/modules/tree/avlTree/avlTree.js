@@ -1,12 +1,12 @@
 import { GREY, RED } from '../../util/colors';
 import { Stack } from '../../util/stack';
-import { waitNFrame } from '../../util/waitNFrame';
+import { BaseTree } from '../common/baseTree';
 import { Node } from '../common/node';
 
-export function AVLTree(waitFrame) {
-  this.root;
+AVLTree.prototype = Object.create(BaseTree.prototype);
 
-  let canContinue = waitNFrame(waitFrame);
+function AVLTree(waitFrame) {
+  BaseTree.call(this, waitFrame);
 
   this.insert = function (value) {
     let insertGenerator = this.iteInsert(value);
@@ -33,7 +33,7 @@ export function AVLTree(waitFrame) {
     let current = this.root;
     while (current !== undefined) {
       current.changeColor(RED);
-      while (canContinue.next().value === false) {
+      while (this.canContinue.next().value === false) {
         yield;
       }
       current.changeColor(GREY);
@@ -62,7 +62,7 @@ export function AVLTree(waitFrame) {
       }
 
       updateHeight(current);
-      let balanceGen = balance(current);
+      let balanceGen = this.balance(current);
       let state;
       while (state === undefined || !state.done) {
         state = balanceGen.next();
@@ -83,7 +83,7 @@ export function AVLTree(waitFrame) {
 
     while (current !== undefined) {
       current.changeColor(RED);
-      while (canContinue.next().value === false) {
+      while (this.canContinue.next().value === false) {
         yield;
       }
       current.changeColor(GREY);
@@ -129,7 +129,7 @@ export function AVLTree(waitFrame) {
       }
 
       updateHeight(current);
-      let balanceGen = balance(current);
+      let balanceGen = this.balance(current);
       let state;
       while (state === undefined || !state.done) {
         state = balanceGen.next();
@@ -163,9 +163,9 @@ export function AVLTree(waitFrame) {
     root.balanceFactor = rightHeight - leftHeight;
   }
 
-  function * balance(root) {
+  this.balance = function * (root) {
     root.changeColor(RED);
-    while (canContinue.next().value === false) {
+    while (this.canContinue.next().value === false) {
       yield;
     }
     if (root.balanceFactor > 1) {
@@ -173,7 +173,7 @@ export function AVLTree(waitFrame) {
         // right right case
         root.changeColor(RED);
         root.showLeftRotationArrow = true;
-        while (canContinue.next().value === false) {
+        while (this.canContinue.next().value === false) {
           yield;
         }
         root.showLeftRotationArrow = false;
@@ -184,7 +184,7 @@ export function AVLTree(waitFrame) {
         // right left case
         root.rightChild.changeColor(RED);
         root.rightChild.showRightRotationArrow = true;
-        while (canContinue.next().value === false) {
+        while (this.canContinue.next().value === false) {
           yield;
         }
         root.rightChild.changeColor(GREY);
@@ -194,7 +194,7 @@ export function AVLTree(waitFrame) {
 
         root.changeColor(RED);
         root.showLeftRotationArrow = true;
-        while (canContinue.next().value === false) {
+        while (this.canContinue.next().value === false) {
           yield;
         }
         root.showLeftRotationArrow = false;
@@ -207,7 +207,7 @@ export function AVLTree(waitFrame) {
         // left left case
         root.changeColor(RED);
         root.showRightRotationArrow = true;
-        while (canContinue.next().value === false) {
+        while (this.canContinue.next().value === false) {
           yield;
         }
         root.showRightRotationArrow = false;
@@ -218,7 +218,7 @@ export function AVLTree(waitFrame) {
         // left right case
         root.leftChild.changeColor(RED);
         root.leftChild.showLeftRotationArrow = true;
-        while (canContinue.next().value === false) {
+        while (this.canContinue.next().value === false) {
           yield;
         }
         root.leftChild.showLeftRotationArrow = false;
@@ -228,7 +228,7 @@ export function AVLTree(waitFrame) {
 
         root.changeColor(RED);
         root.showRightRotationArrow = true;
-        while (canContinue.next().value === false) {
+        while (this.canContinue.next().value === false) {
           yield;
         }
         root.showRightRotationArrow = false;
@@ -261,3 +261,5 @@ export function AVLTree(waitFrame) {
     return newRoot;
   }
 }
+
+export { AVLTree };
