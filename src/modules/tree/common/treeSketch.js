@@ -13,23 +13,44 @@ export function createTreeSketch(tree) {
     let animationGenerator;
   
     let inputElement;
+    let buttons = [];
   
     p.setup = function () {
       p.createCanvas(canvasWidth, canvasHeight);
       inputElement = p.createInput('');
       inputElement.attribute('placeholder', 'Enter number');
       inputElement.position(10, 40);
+      let inOrderButton = p.createButton('Inorder');
+      inOrderButton.position(10, 80);
+      inOrderButton.mousePressed(inOrderTraverse); 
+      buttons.push(inOrderButton);
+
+      let preOrderButton = p.createButton('Preorder');
+      preOrderButton.position(10, 120);
+      preOrderButton.mousePressed(preOrderTraverse); 
+      buttons.push(preOrderButton);
+
+      let postOrderButton = p.createButton('Postorder');
+      postOrderButton.position(10, 160);
+      postOrderButton.mousePressed(postOrderTraverse); 
+      buttons.push(postOrderButton);
+
+      let levelOrderButton = p.createButton('Levelorder');
+      levelOrderButton.position(10, 200);
+      levelOrderButton.mousePressed(levelOrderTraverse); 
+      buttons.push(levelOrderButton);
+
     }
   
     p.draw = function () {
       p.background(255, 255, 255);
-      p.text('Enter a number to insert a new node.\n' +
-        'Click on a node to remove it.', 10, 10);
+      p.text('Enter a number to insert a new node.' +
+        ' Click on a node to remove it.\nClick on button to see traversal', 10, 10);
   
       if (animationPlaying && animationGenerator !== undefined) {
         if (animationGenerator.next().done) {
           animationPlaying = false;
-          inputElement.removeAttribute('disabled');
+          enableInteraction();
         }
       }
   
@@ -46,7 +67,7 @@ export function createTreeSketch(tree) {
       }
   
       if (p.keyCode === p.ENTER) {
-        validateInputAndInsert();
+        validateInputAndInsertNode();
       }
     }
   
@@ -80,21 +101,45 @@ export function createTreeSketch(tree) {
     }
   
     function removeNode(value) {
+      disableInteraction();
       animationPlaying = true;
-      inputElement.attribute('disabled', '');
       animationGenerator = tree.iteRemove(value);
     }
   
-    function validateInputAndInsert() {
+    function validateInputAndInsertNode() {
       const num = parseInt(inputElement.value());
       inputElement.value('');
       if (!Number.isNaN(num)) {
+        disableInteraction();
         animationPlaying = true;
-        inputElement.attribute('disabled', '');
         animationGenerator = tree.iteInsert(num);
       }
     }
+
+    function inOrderTraverse() {
+      disableInteraction();
+      animationPlaying = true;
+      animationGenerator = tree.inOrderTraverse();
+    }
   
+    function preOrderTraverse() {
+      disableInteraction();
+      animationPlaying = true;
+      animationGenerator = tree.preOrderTraverse();
+    }
+
+    function postOrderTraverse() {
+      disableInteraction();
+      animationPlaying = true;
+      animationGenerator = tree.postOrderTraverse();
+    }
+
+    function levelOrderTraverse() {
+      disableInteraction();
+      animationPlaying = true;
+      animationGenerator = tree.levelOrderTraverse();
+    }
+
     function recDisplayNode(root) {
       if (root === undefined) {
         return;
@@ -142,6 +187,20 @@ export function createTreeSketch(tree) {
       }
   
       return { x, y };
+    }
+
+    function disableInteraction() {
+      inputElement.attribute('disabled', '');
+      for (let button of buttons) {
+        button.attribute('disabled', '');
+      }
+    }
+
+    function enableInteraction() {
+      inputElement.removeAttribute('disabled');
+      for (let button of buttons) {
+        button.removeAttribute('disabled');
+      }
     }
   }
 }
