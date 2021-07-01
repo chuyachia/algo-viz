@@ -1,6 +1,6 @@
 import { GREY } from "../../util/colors";
 
-export function Edge(weight, from, to, vertexDiameter, p, directed) {
+export function Edge(weight, from, to) {
   this.weight = weight;
   this.from = from;
   this.to = to;
@@ -9,19 +9,19 @@ export function Edge(weight, from, to, vertexDiameter, p, directed) {
   let g = GREY.g;
   let b = GREY.b;
 
-  this.display = function() {
+  this.display = function(p, vertexDiameter, directed) {
     if (this.from == null || this.to == null) {
       return;
     }
 
     if (directed) {
-      this.drawDirectedEdge();
+      this.drawDirectedEdge(p, vertexDiameter);
     } else {
-      this.drawUndirectedEdge();
+      this.drawUndirectedEdge(p, vertexDiameter);
     }
   }
 
-  this.drawUndirectedEdge = function() {
+  this.drawUndirectedEdge = function(p, vertexDiameter) {
     var angle = p.atan2(this.from.y - this.to.y, this.from.x - this.to.x);
     p.push();
     p.stroke(r, g, b);
@@ -30,7 +30,7 @@ export function Edge(weight, from, to, vertexDiameter, p, directed) {
     p.pop(); 
   }
 
-  this.drawDirectedEdge = function() {
+  this.drawDirectedEdge = function(p, vertexDiameter) {
     var angle = p.atan2(this.from.y - this.to.y, this.from.x - this.to.x);
     p.push();
     p.stroke(r, g, b);

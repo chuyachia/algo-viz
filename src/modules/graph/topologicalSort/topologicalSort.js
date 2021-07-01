@@ -38,8 +38,8 @@ export function* topologicalSort(vertices, waitFrame) {
       continue;
     }
 
-    visit.push({seq, edge : new Edge(0, null, vertex, 0, 0)});
-    backtrack.push({seq, edge: new Edge(0, null, vertex, 0, 0)});
+    visit.push({seq, edge : new Edge(0, null, vertex)});
+    backtrack.push({seq, edge: new Edge(0, null, vertex)});
     seq++;
 
     while (visit.size() > 0) {

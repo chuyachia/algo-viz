@@ -1,7 +1,7 @@
 import { GREY } from '../../util/colors';
 import { Edge } from './edge';
 
-export function Vertex(id, x, y, diameter, p) {
+export function Vertex(id, x, y) {
   this.id = id;
   this.x = x;
   this.y = y;
@@ -15,7 +15,7 @@ export function Vertex(id, x, y, diameter, p) {
   let strokeWeight = 0;
   let existingEdges = new Set();
 
-  this.display = function() {
+  this.display = function(p, diameter) {
     if (this.x === undefined || this.y === undefined) {
       return;
     }
@@ -33,9 +33,9 @@ export function Vertex(id, x, y, diameter, p) {
     p.pop();
   }
 
-  this.displayEdges = function() {
+  this.displayEdges = function(p, diameter) {
     for (const edge of this.edges) {
-      edge.display();
+      edge.display(p, diameter, true);
     }
   }
   
@@ -58,7 +58,7 @@ export function Vertex(id, x, y, diameter, p) {
   this.addEdge = function(vertex, weight) {
     if (vertex.id != this.id && ! existingEdges.has(vertex.id)) {
       existingEdges.add(vertex.id);
-      this.edges.push(new Edge(weight, this, vertex, diameter, p, true));
+      this.edges.push(new Edge(weight, this, vertex));
     }
   }
 }

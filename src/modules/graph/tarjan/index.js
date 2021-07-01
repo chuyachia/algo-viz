@@ -36,7 +36,7 @@ export function sketch(p) {
 
     if (mode == 0) {
       if (pendingEdge !== undefined) {
-        pendingEdge.display();
+        pendingEdge.display(p);
       }
     } else if (mode == 1) {
       let state = tarjanSolver.next();
@@ -46,12 +46,12 @@ export function sketch(p) {
     }
 
     for (const v of vertices) {
-      v.displayEdges();
+      v.displayEdges(p, vertexDiameter);
     }
 
     // So that vertex text will show on top of edge arrow
     for (const v of vertices) {
-      v.display();
+      v.display(p, vertexDiameter);
     }
   }
 
@@ -113,7 +113,7 @@ export function sketch(p) {
     
     if (pendingEdgeFrom === undefined) {
       pendingEdgeFrom  = currentVertex;
-      pendingEdge = new GrowingEdge(pendingEdgeFrom.x, pendingEdgeFrom.y, p);
+      pendingEdge = new GrowingEdge(pendingEdgeFrom.x, pendingEdgeFrom.y);
     } else {
       pendingEdgeFrom.addEdge(currentVertex, 1);
       pendingEdgeFrom = undefined;

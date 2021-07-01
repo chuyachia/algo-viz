@@ -1,6 +1,6 @@
 import { GREY } from "../../util/colors";
 
-export function GrowingEdge(fromX, fromY, p) {
+export function GrowingEdge(fromX, fromY) {
   this.weight = 1;
 
   this.increaseWeight = function() {
@@ -8,7 +8,7 @@ export function GrowingEdge(fromX, fromY, p) {
     this.weight = this.weight % 10;
   }
 
-  this.display = function() {
+  this.display = function(p) {
     p.push();
     p.stroke(GREY.r, GREY.g, GREY.b);
     p.strokeWeight(this.weight);

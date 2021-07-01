@@ -20,8 +20,8 @@ export function* tarjan(vertices, waitFrame) {
 
     let startLowLink = lowLink;
     let seq = 0;
-    visit.push({seq, edge : new Edge(0, null, vertex, 0, 0)});
-    backtrack.push({seq, edge : new Edge(0, null, vertex, 0, 0)});
+    visit.push({seq, edge : new Edge(0, null, vertex)});
+    backtrack.push({seq, edge : new Edge(0, null, vertex)});
     seq++;
 
     while (visit.size() > 0) {

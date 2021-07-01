@@ -20,7 +20,7 @@ export function* hierholzer(vertices, waitFrame) {
     }
   }
 
-  const visitOrder = new Array(edgeCount + 1);
+  const visitOrder = [];
   let pathExists = true;
   let startVertex, endVertex, linkedVertex;
 
@@ -59,7 +59,8 @@ export function* hierholzer(vertices, waitFrame) {
 
   let currentVertex = startVertex || linkedVertex;
   const stack = new LinkedList();
-  stack.addFirst(new Edge(0, null, currentVertex, 0, 0));
+  stack.addFirst(new Edge(0, null, currentVertex));
+  let order = edgeCount;
 
   while (currentVertex !== undefined && outDegree[currentVertex.id] > 0) {
     currentVertex.changeColor(RED);
@@ -83,12 +84,12 @@ export function* hierholzer(vertices, waitFrame) {
         yield;
       }
       if (backtrackVertex.displayValue && backtrackVertex.displayValue.length > 0) {
-        backtrackVertex.displayValue += ','+ edgeCount;
+        backtrackVertex.displayValue += ','+ order;
       } else {
-        backtrackVertex.displayValue = edgeCount.toString();
+        backtrackVertex.displayValue = order.toString();
       }
-      visitOrder[edgeCount] = backtrackVertex.id;
-      edgeCount--;
+      visitOrder.unshift(backtrackVertex.id);
+      order--;
       if (stack.size() > 0) {
         currentVertex = stack.peek().to;
       } else {
@@ -98,5 +99,7 @@ export function* hierholzer(vertices, waitFrame) {
     }
   }
 
-  return visitOrder;
+  const hasPath = visitOrder.length === edgeCount+1;
+
+  return hasPath? visitOrder: false;
 }

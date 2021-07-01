@@ -8,7 +8,7 @@ export function drawVertices(p, n, canvasWidth, canvasHeight, graphRadius, verte
   for (let i = 0;i < n;i++) {
     const x = graphRadius * p.cos(angle) + canvasWidth/2;
     const y = graphRadius * p.sin(angle) + canvasHeight/2;
-    const v = new Vertex(i, x, y, vertexDiameter, p);
+    const v = new Vertex(i, x, y);
     v.displayValue = vertexRenderDisplayValue;
     vertices.push(v);
     angle += step;

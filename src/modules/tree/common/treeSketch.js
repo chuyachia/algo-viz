@@ -1,5 +1,6 @@
 import { Edge } from "../../graph/common/edge";
 import { Stack } from "../../util/stack";
+import { Node } from "./node";
 
 export function createTreeSketch(tree) {
 
@@ -140,6 +141,11 @@ export function createTreeSketch(tree) {
       animationGenerator = tree.levelOrderTraverse();
     }
 
+    /**
+     * 
+     * @param {Node} root 
+     * @returns 
+     */
     function recDisplayNode(root) {
       if (root === undefined) {
         return;
@@ -148,14 +154,14 @@ export function createTreeSketch(tree) {
       root.x = x;
       root.y = y;
       root.display(p, vertexDiameter);
-  
+
       if (root.leftChild !== undefined) {
         root.leftChild.index = 2 * root.index;
         const { x, y } = getCoordinate(root.leftChild.index);
         root.leftChild.x = x;
         root.leftChild.y = y;
-        root.leftChildEdge = new Edge(1, root, root.leftChild, vertexDiameter, p, false);
-        root.leftChildEdge.display();
+        root.leftChildEdge = new Edge(1, root, root.leftChild);
+        root.leftChildEdge.display(p, vertexDiameter, false);
         recDisplayNode(root.leftChild);
       }
       if (root.rightChild !== undefined) {
@@ -163,8 +169,8 @@ export function createTreeSketch(tree) {
         const { x, y } = getCoordinate(root.rightChild.index);
         root.rightChild.x = x;
         root.rightChild.y = y;
-        root.rightChildEdge = new Edge(1, root, root.rightChild, vertexDiameter, p, false);
-        root.rightChildEdge.display();
+        root.rightChildEdge = new Edge(1, root, root.rightChild);
+        root.rightChildEdge.display(p, vertexDiameter, false);
         recDisplayNode(root.rightChild);
       }
     }
