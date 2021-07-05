@@ -9,6 +9,9 @@ export function Grid(startX, startY, p) {
   this.rowHeader = [];
   this.m = 0;
   this.n = 0;
+  /**
+   * @type {Cell[][]}
+   */
   this.grid = [];
 
 

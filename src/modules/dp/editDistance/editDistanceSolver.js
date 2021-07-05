@@ -1,20 +1,35 @@
 import { BLUE, GREY, RED } from "../../util/colors";
 import { waitNFrame } from "../../util/waitNFrame";
+import { Cell } from "../common/cell";
 
+/**
+ * 
+ * @param {Cell[][]} grid 
+ * @param {string} fromCharArray 
+ * @param {string} toCharArray 
+ * @param {number} waitFrame 
+ * @returns 
+ */
 export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame) {
   const canContinue = waitNFrame(waitFrame);
   if (grid === undefined || grid[0] === undefined) {
     throw 'grid must be 2D array';
   }
-
   const n = grid.length;
   const m = grid[0].length;
+
+  if (m!= fromCharArray.length || n!= toCharArray.length) {
+    throw 'grid must be m * n, where m = fromCharArray.length and n = toCharArray.length';
+  }
+  /**
+   * @type {number[][][]} n*m*2 grid that memorizes the previous location
+   */
   const prev = Array.from(Array(n), () => new Array(m));
 
   for (let i = 0;i < m;i++) {
     grid[0][i].value = i;
     if (i > 0) {
-      prev[0][i] = [0, i-1];
+      grid[0][i].prev = [0, i-1];
     }
 
     grid[0][i].changeColor(RED);
@@ -44,45 +59,46 @@ export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame)
         yield;
       }
 
+      let fromCell;
+
       if (fromCharArray[j] === toCharArray[i]) {
-        grid[i][j].value = grid[i - 1][j - 1].value;
+        // character matches, no edit required
+        fromCell = grid[i - 1][j -1];
+        grid[i][j].value = fromCell.value;
         prev[i][j] = [i - 1, j - 1];
 
-        grid[i - 1][j -1].changeColor(BLUE);
-        while (canContinue.next().value === false) {
-          yield;
-        }
-        grid[i - 1][j -1].changeColor(GREY);
       } else {
-        let minPrev = Math.min(grid[i][j - 1].value, Math.min(grid[i - 1][j].value, grid[i-1][j - 1].value));
-
-        if (minPrev === grid[i - 1][j].value) {
-          prev[i][j] = [i - 1, j];
-
-          grid[i - 1][j].changeColor(BLUE);
-          while (canContinue.next().value === false) {
-            yield;
-          }
-          grid[i - 1][j].changeColor(GREY);
-        } else if (minPrev === grid[i][j -1].value) {
-          prev[i][j] = [i, j - 1];
-
-          grid[i][j - 1].changeColor(BLUE);
-          while (canContinue.next().value === false) {
-            yield;
-          }
-          grid[i][j - 1].changeColor(GREY);
-        }  else {
-          prev[i][j] = [i - 1, j - 1];
-
-          grid[i - 1][j - 1].changeColor(BLUE);
-          while (canContinue.next().value === false) {
-            yield;
-          }
-          grid[i - 1][j - 1].changeColor(GREY);
+        // 3 possible edits
+        // remove
+        let e1 = grid[i][j - 1].value + 1;
+        // add
+        let e2 = grid[i - 1][j].value + 1;
+        // replace
+        let e3 = grid[i-1][j - 1].value + 1;
+        let minEdit = Math.min(e1, e2, e3);
+        switch (minEdit) {
+          case e1:
+            prev[i][j] = [i, j - 1];
+            fromCell = grid[i][j - 1];
+            break;
+          case e2:
+            prev[i][j] = [i - 1, j];
+            fromCell = grid[i - 1][j];
+            break; 
+          case e3:
+            prev[i][j] = [i - 1, j - 1];
+            fromCell = grid[i - 1][j - 1];
+            break;
+          default:
+            break;
         }
-        grid[i][j].value = minPrev + 1;
+        grid[i][j].value = minEdit;
       }
+      fromCell.changeColor(BLUE);
+      while (canContinue.next().value === false) {
+        yield;
+      }
+      fromCell.changeColor(GREY);
 
       grid[i][j].changeColor(GREY);
     }

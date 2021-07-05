@@ -1,7 +1,15 @@
 import { GREY } from "../../util/colors";
 
 export function Cell(x, y, width, height, value, p) {
+  /**
+   * @type {number}
+   */
   this.value = value;
+
+  /**
+   * @type {Cell} previous cell. For backtracking solutions
+   */
+  this.prev;
 
   let r = GREY.r;
   let g = GREY.g;
