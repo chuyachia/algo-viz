@@ -1,5 +1,5 @@
-import { Edge } from '../../graph/common/edge';
-import { GREY } from '../../util/colors';
+import { Edge } from "../../graph/common/edge";
+import { GREY } from "../../util/colors";
 
 export function Node(value) {
   /**
@@ -55,7 +55,7 @@ export function Node(value) {
   let g = GREY.g;
   let b = GREY.b;
 
-  this.display = function(p, diameter) {
+  this.display = function (p, diameter) {
     if (this.x === undefined || this.y === undefined) {
       return;
     }
@@ -63,11 +63,11 @@ export function Node(value) {
     p.push();
     p.stroke(r, g, b);
     p.strokeWeight(this.strokeWeight);
-    p.fill(r,g, b);
+    p.fill(r, g, b);
     p.circle(this.x, this.y, diameter);
-    p.fill(0,0,0);
+    p.fill(0, 0, 0);
     p.textAlign(p.CENTER);
-    p.text(this.value , this.x, this.y);
+    p.text(this.value, this.x, this.y);
     p.pop();
     if (this.showRightRotationArrow) {
       this.rightArrow(p, diameter);
@@ -75,45 +75,60 @@ export function Node(value) {
     if (this.showLeftRotationArrow) {
       this.leftArrow(p, diameter);
     }
-  }
+  };
 
-  this.removeArrow = function() {
+  this.removeArrow = function () {
     this.showLeftRotationArrow = false;
     this.showRightRotationArrow = false;
-  }
+  };
 
-   this.rightArrow = function(p, diameter) {
+  this.rightArrow = function (p, diameter) {
     let arcDiameter = diameter + 15;
     p.push();
     p.noFill();
     p.stroke(GREY.r, GREY.g, GREY.b);
     p.arc(this.x, this.y, arcDiameter, arcDiameter, p.PI, p.TWO_PI);
-    let triangleCenter = this.x + arcDiameter/2;
-    p.triangle(triangleCenter, this.y + 10, triangleCenter-5, this.y, triangleCenter+5, this.y);
+    let triangleCenter = this.x + arcDiameter / 2;
+    p.triangle(
+      triangleCenter,
+      this.y + 10,
+      triangleCenter - 5,
+      this.y,
+      triangleCenter + 5,
+      this.y
+    );
     p.pop();
-  }
+  };
 
-  this.leftArrow = function(p, diameter) {
+  this.leftArrow = function (p, diameter) {
     let arcDiameter = diameter + 15;
     p.push();
     p.noFill();
     p.stroke(GREY.r, GREY.g, GREY.b);
     p.arc(this.x, this.y, arcDiameter, arcDiameter, p.PI, p.TWO_PI);
-    let triangleCenter = this.x - arcDiameter/2;
-    p.triangle(triangleCenter, this.y + 10, triangleCenter-5, this.y, triangleCenter+5, this.y);
+    let triangleCenter = this.x - arcDiameter / 2;
+    p.triangle(
+      triangleCenter,
+      this.y + 10,
+      triangleCenter - 5,
+      this.y,
+      triangleCenter + 5,
+      this.y
+    );
     p.pop();
-  }
+  };
 
-  this.changeColor = function(colorObject) {
+  this.changeColor = function (colorObject) {
     r = colorObject.r;
     g = colorObject.g;
     b = colorObject.b;
-  }
+  };
 
-  this.getColor = function() {
+  this.getColor = function () {
     return {
-      r, g, b
+      r,
+      g,
+      b,
     };
-  }
-
+  };
 }

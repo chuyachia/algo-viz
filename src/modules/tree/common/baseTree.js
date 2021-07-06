@@ -1,7 +1,7 @@
-import { GREY, RED } from '../../util/colors';
-import { Stack } from '../../util/stack';
-import { waitNFrame } from '../../util/waitNFrame';
-import { Node } from './node';
+import { GREY, RED } from "../../util/colors";
+import { Stack } from "../../util/stack";
+import { waitNFrame } from "../../util/waitNFrame";
+import { Node } from "./node";
 
 function BaseTree(waitFrame) {
   /**
@@ -12,7 +12,7 @@ function BaseTree(waitFrame) {
 }
 
 BaseTree.prototype = {
-  inOrderTraverse: function * () {
+  inOrderTraverse: function* () {
     const stack = new Stack();
     let current = this.root;
     while (current !== undefined || stack.size() > 0) {
@@ -29,7 +29,7 @@ BaseTree.prototype = {
       current = current.rightChild;
     }
   },
-  preOrderTraverse: function * () {
+  preOrderTraverse: function* () {
     const stack = new Stack();
     stack.push(this.root);
     while (stack.size() > 0) {
@@ -45,18 +45,18 @@ BaseTree.prototype = {
       stack.push(current.leftChild);
     }
   },
-  postOrderTraverse: function * () {
+  postOrderTraverse: function* () {
     const stack1 = new Stack();
     const stack2 = new Stack();
     stack1.push(this.root);
-    while(stack1.size() > 0) {
+    while (stack1.size() > 0) {
       let current = stack1.pop();
       if (current === undefined) continue;
       stack1.push(current.leftChild);
       stack1.push(current.rightChild);
       stack2.push(current);
     }
-    while(stack2.size() > 0) {
+    while (stack2.size() > 0) {
       let current = stack2.pop();
       current.changeColor(RED);
       while (!this.canContinue.next().value) {
@@ -65,10 +65,10 @@ BaseTree.prototype = {
       current.changeColor(GREY);
     }
   },
-  levelOrderTraverse: function * () {
-    const queue = []
+  levelOrderTraverse: function* () {
+    const queue = [];
     queue.push(this.root);
-    while(queue.length > 0) {
+    while (queue.length > 0) {
       let levelCount = queue.length;
       while (levelCount-- > 0) {
         let current = queue.shift();
@@ -83,9 +83,7 @@ BaseTree.prototype = {
         queue.push(current.rightChild);
       }
     }
-  }
-}
+  },
+};
 
 export { BaseTree };
-
-

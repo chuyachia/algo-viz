@@ -1,6 +1,6 @@
-import { BLUE, GREY, RED } from '../../util/colors';
-import { PriorityQueue } from '../../util/priorityQueue';
-import { waitNFrame } from '../../util/waitNFrame';
+import { BLUE, GREY, RED } from "../../util/colors";
+import { PriorityQueue } from "../../util/priorityQueue";
+import { waitNFrame } from "../../util/waitNFrame";
 
 export function* dijkstraSolver(startVertex, n, waitFrame) {
   const dist = new Array(n);
@@ -8,7 +8,7 @@ export function* dijkstraSolver(startVertex, n, waitFrame) {
   const visited = new Array(n);
   const pq = new PriorityQueue((p1, p2) => p1[0] - p2[0]);
   let canContinue = waitNFrame(waitFrame);
-  
+
   startVertex.changeStrokeWeight(5);
   pq.add(startVertex.id, [0, startVertex]);
   dist[startVertex.id] = 0;
@@ -37,8 +37,11 @@ export function* dijkstraSolver(startVertex, n, waitFrame) {
 
       nextEdge.changeColor(RED);
       nextVertex.changeColor(BLUE);
-      
-      if (dist[nextVertex.id] === undefined || nextWeight < dist[nextVertex.id]) {
+
+      if (
+        dist[nextVertex.id] === undefined ||
+        nextWeight < dist[nextVertex.id]
+      ) {
         dist[nextVertex.id] = nextWeight;
         nextVertex.displayValue = dist[nextVertex.id].toFixed(2);
         if (pq.contains(nextVertex.id)) {

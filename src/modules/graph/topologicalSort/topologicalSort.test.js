@@ -1,9 +1,9 @@
-import 'regenerator-runtime/runtime';
+import "regenerator-runtime/runtime";
 
-import { Vertex } from '../common/vertex';
-import { topologicalSort } from './topologicalSort';
+import { Vertex } from "../common/vertex";
+import { topologicalSort } from "./topologicalSort";
 
-test('Topological sort returns correct ordering', () => {
+test("Topological sort returns correct ordering", () => {
   const n = 13;
   const vertices = new Array(n);
   const inEdges = new Array(n);
@@ -53,7 +53,8 @@ test('Topological sort returns correct ordering', () => {
   let state;
   {
     state = ts.next();
-  } while(!state.done);
+  }
+  while (!state.done);
 
   let res = state.value;
   let visited = new Array(n);
@@ -63,4 +64,4 @@ test('Topological sort returns correct ordering', () => {
     }
     visited[id] = true;
   }
-})
+});

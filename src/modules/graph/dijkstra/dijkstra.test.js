@@ -1,10 +1,9 @@
-import 'regenerator-runtime/runtime';
+import "regenerator-runtime/runtime";
 
-import { Vertex } from '../common/vertex';
-import { dijkstraSolver } from './dijkstra';
+import { Vertex } from "../common/vertex";
+import { dijkstraSolver } from "./dijkstra";
 
-
-test('Dijkstra finds shortest distance', () => {
+test("Dijkstra finds shortest distance", () => {
   const n = 6;
   const vertices = new Array(n);
   for (let i = 0; i < n; i++) {
@@ -20,11 +19,12 @@ test('Dijkstra finds shortest distance', () => {
   vertices[3].addEdge(vertices[5], 2);
   vertices[4].addEdge(vertices[5], 5);
 
-  let ds = dijkstraSolver(vertices[0, n, 0], n, 0);
+  let ds = dijkstraSolver(vertices[(0, n, 0)], n, 0);
   let res;
   {
     res = ds.next();
-  } while(!res.done);
+  }
+  while (!res.done);
 
   let dist = res.value;
 
@@ -34,9 +34,9 @@ test('Dijkstra finds shortest distance', () => {
   expect(dist[3]).toBe(22);
   expect(dist[4]).toBe(23);
   expect(dist[5]).toBe(24);
-})
+});
 
-test('Dijkstra finds shortest distance 2', () => {
+test("Dijkstra finds shortest distance 2", () => {
   const n = 5;
   const vertices = new Array(n);
   for (let i = 0; i < n; i++) {
@@ -53,11 +53,12 @@ test('Dijkstra finds shortest distance 2', () => {
   vertices[4].addEdge(vertices[2], 8);
   vertices[4].addEdge(vertices[3], 2);
 
-  let ds = dijkstraSolver(vertices[0, n, 0], n, 0);
+  let ds = dijkstraSolver(vertices[(0, n, 0)], n, 0);
   let res;
   {
     res = ds.next();
-  } while(!res.done);
+  }
+  while (!res.done);
 
   let dist = res.value;
 
@@ -66,4 +67,4 @@ test('Dijkstra finds shortest distance 2', () => {
   expect(dist[2]).toBe(6);
   expect(dist[3]).toBe(5);
   expect(dist[4]).toBe(3);
-})
+});

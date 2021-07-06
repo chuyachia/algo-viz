@@ -1,7 +1,7 @@
-import { GREY, RED } from '../../util/colors';
-import { Stack } from '../../util/stack';
-import { BaseTree } from '../common/baseTree';
-import { Node } from '../common/node';
+import { GREY, RED } from "../../util/colors";
+import { Stack } from "../../util/stack";
+import { BaseTree } from "../common/baseTree";
+import { Node } from "../common/node";
 
 AVLTree.prototype = Object.create(BaseTree.prototype);
 
@@ -15,8 +15,7 @@ function AVLTree(waitFrame) {
     while (!state || !state.done) {
       state = insertGenerator.next();
     }
-  }
-
+  };
 
   this.remove = function (value) {
     let removeGenerator = this.iteRemove(value);
@@ -25,8 +24,7 @@ function AVLTree(waitFrame) {
     while (!state || !state.done) {
       state = removeGenerator.next();
     }
-  }
-
+  };
 
   this.iteInsert = function* (value) {
     const backtrack = new Stack();
@@ -74,7 +72,7 @@ function AVLTree(waitFrame) {
     }
 
     this.root = prev;
-  }
+  };
 
   this.iteRemove = function* (value) {
     const backtrack = new Stack();
@@ -95,8 +93,14 @@ function AVLTree(waitFrame) {
         backtrack.push(current);
         current = current.leftChild;
       } else {
-        if (current.leftChild === undefined || current.rightChild === undefined) {
-          let replacement = current.leftChild === undefined ? current.rightChild : current.leftChild;
+        if (
+          current.leftChild === undefined ||
+          current.rightChild === undefined
+        ) {
+          let replacement =
+            current.leftChild === undefined
+              ? current.rightChild
+              : current.leftChild;
           if (backtrack.size() > 0) {
             if (current.value >= backtrack.peek().value) {
               // equal allow here because root value was changed to replacemnet value, which can be the parent of the node to delete
@@ -141,8 +145,7 @@ function AVLTree(waitFrame) {
     }
 
     this.root = prev;
-  }
-
+  };
 
   function findMinValue(node) {
     if (node === undefined) {
@@ -163,7 +166,7 @@ function AVLTree(waitFrame) {
     root.balanceFactor = rightHeight - leftHeight;
   }
 
-  this.balance = function * (root) {
+  this.balance = function* (root) {
     root.changeColor(RED);
     while (this.canContinue.next().value === false) {
       yield;
@@ -189,7 +192,7 @@ function AVLTree(waitFrame) {
         }
         root.rightChild.changeColor(GREY);
         root.rightChild.showRightRotationArrow = false;
-        
+
         root.rightChild = rightRotation(root.rightChild);
 
         root.changeColor(RED);
@@ -240,7 +243,7 @@ function AVLTree(waitFrame) {
     root.changeColor(GREY);
 
     return root;
-  }
+  };
 
   function rightRotation(root) {
     let newRoot = root.leftChild;
@@ -250,7 +253,6 @@ function AVLTree(waitFrame) {
     updateHeight(newRoot);
     return newRoot;
   }
-
 
   function leftRotation(root) {
     let newRoot = root.rightChild;

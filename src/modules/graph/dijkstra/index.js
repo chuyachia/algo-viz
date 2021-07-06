@@ -1,7 +1,7 @@
-import { BLUE, GREY, RED } from '../../util/colors';
-import { drawVertices, getClosestVertex } from '../common/graph';
-import { GrowingEdge } from '../common/growingEdge';
-import { dijkstraSolver } from './dijkstra';
+import { BLUE, GREY, RED } from "../../util/colors";
+import { drawVertices, getClosestVertex } from "../common/graph";
+import { GrowingEdge } from "../common/growingEdge";
+import { dijkstraSolver } from "./dijkstra";
 
 export function sketch(p) {
   const canvasWidth = 550;
@@ -21,13 +21,21 @@ export function sketch(p) {
   p.setup = function () {
     p.createCanvas(canvasWidth, canvasHeight);
     drawButton();
-    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, vertexDiameter, 'Inf');
-  }
+    vertices = drawVertices(
+      p,
+      n,
+      canvasWidth,
+      canvasHeight,
+      radius,
+      vertexDiameter,
+      "Inf"
+    );
+  };
 
   function drawButton() {
-    button = p.createButton('');
+    button = p.createButton("");
     button.position(10, 40);
-    button.addClass('action-button');
+    button.addClass("action-button");
   }
 
   p.draw = function () {
@@ -57,7 +65,7 @@ export function sketch(p) {
     for (const v of vertices) {
       v.display(p, vertexDiameter);
     }
-  }
+  };
 
   function showLabels() {
     p.push();
@@ -79,25 +87,33 @@ export function sketch(p) {
   function showInstructions() {
     switch (mode) {
       case 0:
-        p.text('Click on nodes to add link. Keep mouse pressed to increase link weight.\n' +
-          'Once the graph is done, click on the button to find the shortest distance', 10, 10);
-        button.html('Find shortest distance');
+        p.text(
+          "Click on nodes to add link. Keep mouse pressed to increase link weight.\n" +
+            "Once the graph is done, click on the button to find the shortest distance",
+          10,
+          10
+        );
+        button.html("Find shortest distance");
         button.show();
         button.mousePressed(function () {
           mode = 1;
         });
         break;
       case 1:
-        p.text('Choose a start node to begin', 10, 10);
+        p.text("Choose a start node to begin", 10, 10);
         button.hide();
         break;
       case 2:
-        p.text('Finding shortest distance from node ' + startVertex.id, 10, 10);
+        p.text("Finding shortest distance from node " + startVertex.id, 10, 10);
         break;
       case 3:
-        p.text('Shortest distance from node ' + startVertex.id + ' found', 10, 10);
+        p.text(
+          "Shortest distance from node " + startVertex.id + " found",
+          10,
+          10
+        );
         button.show();
-        button.html('Restart');
+        button.html("Restart");
         button.mousePressed(function () {
           reset();
         });
@@ -110,7 +126,15 @@ export function sketch(p) {
     startVertex = undefined;
     dSolver = undefined;
     mode = 0;
-    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, vertexDiameter, 'Inf');
+    vertices = drawVertices(
+      p,
+      n,
+      canvasWidth,
+      canvasHeight,
+      radius,
+      vertexDiameter,
+      "Inf"
+    );
   }
 
   p.mouseClicked = function () {
@@ -124,7 +148,7 @@ export function sketch(p) {
       dSolver = dijkstraSolver(startVertex, n, 50);
       mode = 2;
     }
-  }
+  };
 
   p.mouseReleased = function () {
     if (mode > 0) {
@@ -141,12 +165,13 @@ export function sketch(p) {
       pendingEdgeFrom = currentVertex;
       pendingEdge = new GrowingEdge(pendingEdgeFrom.x, pendingEdgeFrom.y);
     } else {
-      let roundedWeight = Math.round(pendingEdge.weight * 1000) / 1000
+      let roundedWeight = Math.round(pendingEdge.weight * 1000) / 1000;
       pendingEdgeFrom.addEdge(currentVertex, roundedWeight);
       pendingEdgeFrom = undefined;
       pendingEdge = undefined;
     }
-  }
+  };
 }
 
-export const explainText = "<p><strong>Dijkstra's algorithm</strong> finds the shortest distance from one node to all other nodes in graphs with non-negative edges. It starts with a node, updates the distance to all its neighbors if the current distance to the neighbor is smaller than previously calculated distance. The current distance from a node to it's neighbor is the sum of the distance to the node and the weight of the edge leading to the neighbor.</p><p>Once all neighbors of a node are visited, the algorithm continues the same procedure with the node that is currently reachable with the shortest distance. Nodes that are already visited will not be revisited. Priority queue (binary heap) can be used to keep track of the reachable nodes and their distances. Head of the queue will have the current reachable node with the shortest distance.</p>";
+export const explainText =
+  "<p><strong>Dijkstra's algorithm</strong> finds the shortest distance from one node to all other nodes in graphs with non-negative edges. It starts with a node, updates the distance to all its neighbors if the current distance to the neighbor is smaller than previously calculated distance. The current distance from a node to it's neighbor is the sum of the distance to the node and the weight of the edge leading to the neighbor.</p><p>Once all neighbors of a node are visited, the algorithm continues the same procedure with the node that is currently reachable with the shortest distance. Nodes that are already visited will not be revisited. Priority queue (binary heap) can be used to keep track of the reachable nodes and their distances. Head of the queue will have the current reachable node with the shortest distance.</p>";

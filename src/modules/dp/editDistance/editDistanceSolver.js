@@ -1,20 +1,62 @@
 import { BLUE, GREY, RED } from "../../util/colors";
 import { waitNFrame } from "../../util/waitNFrame";
+import { Cell } from "../common/cell";
+import { Grid } from "../common/grid";
 
-export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame) {
+export function editDistance(from, to) {
+  let fromCharArray = from.split("");
+  fromCharArray.unshift("");
+  let toCharArray = to.split("");
+  toCharArray.unshift("");
+  let gridElement = new Grid(10, 80);
+  gridElement.setColumnHeader(fromCharArray);
+  gridElement.setRowHeader(toCharArray);
+  gridElement.buildGrid();
+
+  let solver = solveEditDistance(
+    gridElement.grid,
+    fromCharArray,
+    toCharArray,
+    0
+  );
+  let res;
+  {
+    res = solver.next();
+  }
+  while (!res.done);
+
+  return res.value.length - 1;
+}
+
+/**
+ *
+ * @param {Cell[][]} grid
+ * @param {string} fromCharArray
+ * @param {string} toCharArray
+ * @param {number} waitFrame
+ * @returns
+ */
+export function* solveEditDistance(
+  grid,
+  fromCharArray,
+  toCharArray,
+  waitFrame
+) {
   const canContinue = waitNFrame(waitFrame);
   if (grid === undefined || grid[0] === undefined) {
-    throw 'grid must be 2D array';
+    throw "grid must be 2D array";
   }
-
   const n = grid.length;
   const m = grid[0].length;
-  const prev = Array.from(Array(n), () => new Array(m));
 
-  for (let i = 0;i < m;i++) {
+  if (m != fromCharArray.length || n != toCharArray.length) {
+    throw "grid must be m * n, where m = fromCharArray.length and n = toCharArray.length";
+  }
+
+  for (let i = 0; i < m; i++) {
     grid[0][i].value = i;
     if (i > 0) {
-      prev[0][i] = [0, i-1];
+      grid[0][i].prev = grid[0][i - 1];
     }
 
     grid[0][i].changeColor(RED);
@@ -24,10 +66,10 @@ export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame)
     grid[0][i].changeColor(GREY);
   }
 
-  for (let i = 0;i < n;i++) {
+  for (let i = 0; i < n; i++) {
     grid[i][0].value = i;
     if (i > 0) {
-      prev[i][0] = [i-1, 0];
+      grid[i][0].prev = grid[i - 1][0];
     }
 
     grid[i][0].changeColor(RED);
@@ -37,96 +79,92 @@ export function * solveEditDistance(grid, fromCharArray, toCharArray, waitFrame)
     grid[i][0].changeColor(GREY);
   }
 
-  for (let i = 1;i < n;i++) {
-    for (let j = 1;j < m;j++) {
+  for (let i = 1; i < n; i++) {
+    for (let j = 1; j < m; j++) {
       grid[i][j].changeColor(RED);
       while (canContinue.next().value === false) {
         yield;
       }
 
+      let fromCell;
+
       if (fromCharArray[j] === toCharArray[i]) {
-        grid[i][j].value = grid[i - 1][j - 1].value;
-        prev[i][j] = [i - 1, j - 1];
-
-        grid[i - 1][j -1].changeColor(BLUE);
-        while (canContinue.next().value === false) {
-          yield;
-        }
-        grid[i - 1][j -1].changeColor(GREY);
+        // character matches, no edit required
+        fromCell = grid[i - 1][j - 1];
+        grid[i][j].value = fromCell.value;
       } else {
-        let minPrev = Math.min(grid[i][j - 1].value, Math.min(grid[i - 1][j].value, grid[i-1][j - 1].value));
+        // 3 possible edits
+        // remove
+        let e1 = grid[i][j - 1].value + 1;
+        // add
+        let e2 = grid[i - 1][j].value + 1;
+        // replace
+        let e3 = grid[i - 1][j - 1].value + 1;
+        let minEdit = Math.min(e1, e2, e3);
+        grid[i][j].value = minEdit;
 
-        if (minPrev === grid[i - 1][j].value) {
-          prev[i][j] = [i - 1, j];
-
-          grid[i - 1][j].changeColor(BLUE);
-          while (canContinue.next().value === false) {
-            yield;
-          }
-          grid[i - 1][j].changeColor(GREY);
-        } else if (minPrev === grid[i][j -1].value) {
-          prev[i][j] = [i, j - 1];
-
-          grid[i][j - 1].changeColor(BLUE);
-          while (canContinue.next().value === false) {
-            yield;
-          }
-          grid[i][j - 1].changeColor(GREY);
-        }  else {
-          prev[i][j] = [i - 1, j - 1];
-
-          grid[i - 1][j - 1].changeColor(BLUE);
-          while (canContinue.next().value === false) {
-            yield;
-          }
-          grid[i - 1][j - 1].changeColor(GREY);
+        switch (minEdit) {
+          case e1:
+            fromCell = grid[i][j - 1];
+            break;
+          case e2:
+            fromCell = grid[i - 1][j];
+            break;
+          case e3:
+            fromCell = grid[i - 1][j - 1];
+            break;
+          default:
+            break;
         }
-        grid[i][j].value = minPrev + 1;
       }
 
+      grid[i][j].prev = fromCell;
+
+      fromCell.changeColor(BLUE);
+      while (canContinue.next().value === false) {
+        yield;
+      }
+      fromCell.changeColor(GREY);
       grid[i][j].changeColor(GREY);
     }
   }
 
-  let i = n-1;
-  let j = m-1;
   let res = [];
   let steps = [];
+  let backTrackCell = grid[n - 1][m - 1];
 
-  while (prev[i][j] !== undefined) {
-    grid[i][j].changeColor(RED);
-
-    steps.unshift([i, j]);
-    let prevCoord = prev[i][j];
-    i = prevCoord[0];
-    j = prevCoord[1];
+  while (backTrackCell.prev !== undefined) {
+    backTrackCell.changeColor(RED);
+    steps.unshift([backTrackCell.x - 1, backTrackCell.y - 1]);
+    backTrackCell = backTrackCell.prev;
   }
 
+  // Reconstruct result string at each edit
   let edit = [...fromCharArray];
   edit.splice(0, 1);
   let editDone = [];
-  res.push(edit.join(''));
-  i = 0;
-  j = 0;
+  res.push(edit.join(""));
+  let i = 0;
+  let j = 0;
   for (let s of steps) {
-    let ni = s[0];
-    let nj = s[1];
-    if (ni === i+1 && nj === j+1) {
+    let ni = s[1];
+    let nj = s[0];
+    if (ni === i + 1 && nj === j + 1) {
       editDone.push(edit.splice(0, 1));
 
       if (grid[ni][nj].value > grid[i][j].value) {
         editDone[editDone.length - 1] = toCharArray[ni];
-        res.push(editDone.join('')+edit.join(''));
+        res.push(editDone.join("") + edit.join(""));
       }
-    } else if (ni === i+1) {
+    } else if (ni === i + 1) {
       editDone.push(toCharArray[ni]);
 
-      res.push(editDone.join('')+edit.join(''));
+      res.push(editDone.join("") + edit.join(""));
     } else {
       editDone.push(edit.splice(0, 1));
 
-      editDone.splice(editDone.length-1, 1);
-      res.push(editDone.join('')+edit.join(''));
+      editDone.splice(editDone.length - 1, 1);
+      res.push(editDone.join("") + edit.join(""));
     }
     i = ni;
     j = nj;

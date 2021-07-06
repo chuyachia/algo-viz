@@ -15,16 +15,16 @@ export function* topologicalSort(vertices, waitFrame) {
   const backtrack = new Stack();
   function renderDisplayValue(value) {
     if (value == undefined) {
-      return 'NA';
+      return "NA";
     }
     if (value == 1) {
-      return value+ 'st';
+      return value + "st";
     } else if (value == 2) {
-      return value+ 'nd';
+      return value + "nd";
     } else if (value == 3) {
-      return value+'rd';
+      return value + "rd";
     } else {
-      return value+'th';
+      return value + "th";
     }
   }
 
@@ -38,8 +38,8 @@ export function* topologicalSort(vertices, waitFrame) {
       continue;
     }
 
-    visit.push({seq, edge : new Edge(0, null, vertex)});
-    backtrack.push({seq, edge: new Edge(0, null, vertex)});
+    visit.push({ seq, edge: new Edge(0, null, vertex) });
+    backtrack.push({ seq, edge: new Edge(0, null, vertex) });
     seq++;
 
     while (visit.size() > 0) {
@@ -64,15 +64,16 @@ export function* topologicalSort(vertices, waitFrame) {
           hasCycle = true;
           break;
         }
-  
-        visit.push({seq, edge});
-        backtrack.push({seq, edge});
+
+        visit.push({ seq, edge });
+        backtrack.push({ seq, edge });
         seq++;
       }
 
-
-      while (backtrack.size() > 0 &&
-       (visit.size() == 0 || visit.peek().seq != backtrack.peek().seq)) {
+      while (
+        backtrack.size() > 0 &&
+        (visit.size() == 0 || visit.peek().seq != backtrack.peek().seq)
+      ) {
         let { edge } = backtrack.pop();
         let vertex = edge.to;
         state[vertex.id] = VISITED;

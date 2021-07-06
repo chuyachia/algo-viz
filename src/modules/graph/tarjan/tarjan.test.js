@@ -1,10 +1,9 @@
-import 'regenerator-runtime/runtime';
+import "regenerator-runtime/runtime";
 
-import { Vertex } from '../common/vertex';
-import { tarjan } from './tarjan';
+import { Vertex } from "../common/vertex";
+import { tarjan } from "./tarjan";
 
-
-test('Tarjan finds strongly connected components', () => {
+test("Tarjan finds strongly connected components", () => {
   const n = 5;
   const vertices = [];
   for (let i = 0; i < n; i++) {
@@ -21,7 +20,8 @@ test('Tarjan finds strongly connected components', () => {
   let state;
   {
     state = ts.next();
-  } while (!state.done);
+  }
+  while (!state.done);
 
   let res = state.value;
 
@@ -30,9 +30,9 @@ test('Tarjan finds strongly connected components', () => {
   expect(res[3]).not.toBe(res[0]);
   expect(res[4]).not.toBe(res[0]);
   expect(res[4]).not.toBe(res[3]);
-})
+});
 
-test('Tarjan finds strongly connected components 2', () => {
+test("Tarjan finds strongly connected components 2", () => {
   const n = 8;
   const vertices = [];
   for (let i = 0; i < n; i++) {
@@ -57,7 +57,8 @@ test('Tarjan finds strongly connected components 2', () => {
   let state;
   {
     state = ts.next();
-  } while (!state.done);
+  }
+  while (!state.done);
 
   let res = state.value;
 
@@ -69,4 +70,4 @@ test('Tarjan finds strongly connected components 2', () => {
   expect(res[0]).not.toBe(res[3]);
   expect(res[0]).not.toBe(res[4]);
   expect(res[3]).not.toBe(res[4]);
-})
+});

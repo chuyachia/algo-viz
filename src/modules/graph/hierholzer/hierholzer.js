@@ -13,7 +13,7 @@ export function* hierholzer(vertices, waitFrame) {
   outDegree.fill(0);
 
   for (const vertex of vertices) {
-    edgeCount+= vertex.edges.length;
+    edgeCount += vertex.edges.length;
     outDegree[vertex.id] = vertex.edges.length;
     for (const edge of vertex.edges) {
       inDegree[edge.to.id]++;
@@ -24,14 +24,14 @@ export function* hierholzer(vertices, waitFrame) {
   let pathExists = true;
   let startVertex, endVertex, linkedVertex;
 
-  for (let i = 0; i < n; i++ ) {
+  for (let i = 0; i < n; i++) {
     let vertex = vertices[i];
     let vertexId = vertex.id;
     if (outDegree[vertexId] > 0) {
       linkedVertex = vertex;
     }
 
-    if (Math.abs(outDegree[vertexId] - inDegree[vertexId]) > 1)  {
+    if (Math.abs(outDegree[vertexId] - inDegree[vertexId]) > 1) {
       pathExists = false;
       break;
     } else if (Math.abs(outDegree[vertexId] - inDegree[vertexId]) === 1) {
@@ -66,11 +66,11 @@ export function* hierholzer(vertices, waitFrame) {
     currentVertex.changeColor(RED);
     let out = outDegree[currentVertex.id];
     outDegree[currentVertex.id]--;
-    let nextEdge = currentVertex.edges[out-1];
+    let nextEdge = currentVertex.edges[out - 1];
     nextEdge.changeColor(RED);
     currentVertex = nextEdge.to;
     stack.addFirst(nextEdge);
-    
+
     while (canContinue.next().value === false) {
       yield;
     }
@@ -83,8 +83,11 @@ export function* hierholzer(vertices, waitFrame) {
       while (canContinue.next().value === false) {
         yield;
       }
-      if (backtrackVertex.displayValue && backtrackVertex.displayValue.length > 0) {
-        backtrackVertex.displayValue += ','+ order;
+      if (
+        backtrackVertex.displayValue &&
+        backtrackVertex.displayValue.length > 0
+      ) {
+        backtrackVertex.displayValue += "," + order;
       } else {
         backtrackVertex.displayValue = order.toString();
       }
@@ -99,7 +102,7 @@ export function* hierholzer(vertices, waitFrame) {
     }
   }
 
-  const hasPath = visitOrder.length === edgeCount+1;
+  const hasPath = visitOrder.length === edgeCount + 1;
 
-  return hasPath? visitOrder: false;
+  return hasPath ? visitOrder : false;
 }

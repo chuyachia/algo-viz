@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
+    "test-interactive": "NODE_ENV=test jest --watch",
     "start": "webpack serve --open --env NODE_ENV=development",
     "build": "webpack --env NODE_ENV=production",
     "predeploy": "npm run build",

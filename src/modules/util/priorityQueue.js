@@ -4,39 +4,39 @@ export function PriorityQueue(comparator) {
   let positionKeyMap = [];
   let size = 0;
 
-  this.peek = function() {
+  this.peek = function () {
     if (size <= 0) {
-      throw new Error('Queue is empty');
+      throw new Error("Queue is empty");
     }
 
     return keyValueMap[positionKeyMap[0]];
-  }
+  };
 
-  this.poll = function() {
+  this.poll = function () {
     if (size <= 0) {
-      throw new Error('Queue is empty');
+      throw new Error("Queue is empty");
     }
 
     let headKey = positionKeyMap[0];
     let rtn = keyValueMap[headKey];
     this.remove(headKey);
     return rtn;
-  }
+  };
 
-  this.add = function(key, value) {
+  this.add = function (key, value) {
     if (this.contains(key)) {
-      throw new Error('Key already exists');
+      throw new Error("Key already exists");
     }
     keyValueMap[key] = value;
     keyPositionMap[key] = size;
     positionKeyMap[size] = key;
     size++;
     bubbleUp(key);
-  }
+  };
 
-  this.remove = function(key) {
+  this.remove = function (key) {
     if (!this.contains(key)) {
-      throw new Error('Key does not exist');
+      throw new Error("Key does not exist");
     }
     let tailKey = positionKeyMap[size - 1];
     swapKeyPositions(key, tailKey);
@@ -46,37 +46,39 @@ export function PriorityQueue(comparator) {
     size--;
     bubbleUp(tailKey);
     bubbleDown(tailKey);
-  }
+  };
 
-  this.update = function(key, value) {
+  this.update = function (key, value) {
     if (!this.contains(key)) {
-      throw new Error('Key does not exist');
+      throw new Error("Key does not exist");
     }
     keyValueMap[key] = value;
     bubbleUp(key);
     bubbleDown(key);
-  }
+  };
 
-  this.contains = function(key) {
+  this.contains = function (key) {
     return keyPositionMap[key] !== undefined;
-  }
+  };
 
-  this.get = function(key) {
+  this.get = function (key) {
     return keyValueMap[key];
-  }
+  };
 
-  this.size = function() {
+  this.size = function () {
     return size;
-  }
+  };
 
   function bubbleUp(key) {
     let parent = getParentKey(key);
-    while (parent !== undefined && comparator(keyValueMap[key], keyValueMap[parent]) < 0) {
+    while (
+      parent !== undefined &&
+      comparator(keyValueMap[key], keyValueMap[parent]) < 0
+    ) {
       swapKeyPositions(key, parent);
       parent = getParentKey(key);
     }
   }
-
 
   function bubbleDown(key) {
     let leftChild = getLeftChildKey(key);
@@ -84,14 +86,17 @@ export function PriorityQueue(comparator) {
 
     while (leftChild !== undefined) {
       let smallerChild = leftChild;
-      if (rightChild !== undefined && comparator(keyValueMap[leftChild], keyValueMap[rightChild]) > 0) {
+      if (
+        rightChild !== undefined &&
+        comparator(keyValueMap[leftChild], keyValueMap[rightChild]) > 0
+      ) {
         smallerChild = rightChild;
       }
-  
+
       if (comparator(keyValueMap[key], keyValueMap[smallerChild]) < 0) {
         break;
       }
-      
+
       swapKeyPositions(key, smallerChild);
 
       leftChild = getLeftChildKey(key);
@@ -115,7 +120,9 @@ export function PriorityQueue(comparator) {
   function getLeftChildKey(key) {
     var currentPosition = keyPositionMap[key];
     var lcPosition = getLeftChildPosition(currentPosition);
-    return lcPosition < size && lcPosition >= 0? positionKeyMap[lcPosition] : undefined;
+    return lcPosition < size && lcPosition >= 0
+      ? positionKeyMap[lcPosition]
+      : undefined;
   }
 
   function getRightChildPosition(i) {
@@ -125,7 +132,9 @@ export function PriorityQueue(comparator) {
   function getRightChildKey(key) {
     var currentPosition = keyPositionMap[key];
     var rcPosition = getRightChildPosition(currentPosition);
-    return rcPosition < size && rcPosition >= 0? positionKeyMap[rcPosition]: undefined;
+    return rcPosition < size && rcPosition >= 0
+      ? positionKeyMap[rcPosition]
+      : undefined;
   }
 
   function getParentPosition(i) {
@@ -135,6 +144,8 @@ export function PriorityQueue(comparator) {
   function getParentKey(key) {
     var currentPosition = keyPositionMap[key];
     var parentPosition = getParentPosition(currentPosition);
-    return parentPosition < size && parentPosition >= 0? positionKeyMap[parentPosition]: undefined;
+    return parentPosition < size && parentPosition >= 0
+      ? positionKeyMap[parentPosition]
+      : undefined;
   }
 }

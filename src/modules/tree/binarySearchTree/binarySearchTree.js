@@ -9,11 +9,10 @@ export function BinarySearchTree(waitFrame) {
 
   this.insert = function (value) {
     let insertGenerator = this.iteInsert(value);
-    while (!insertGenerator.next().done) {
-    }
-  }
+    while (!insertGenerator.next().done) {}
+  };
 
-  this.iteInsert = function * (value) {
+  this.iteInsert = function* (value) {
     const newNode = new Node(value);
     let prev;
     let current = this.root;
@@ -41,14 +40,13 @@ export function BinarySearchTree(waitFrame) {
     } else {
       prev.leftChild = newNode;
     }
-  }
+  };
 
-  this.remove = function(value) {
+  this.remove = function (value) {
     let removeGenerator = this.iteRemove(value);
 
-    while (!removeGenerator.next().done) {
-    }
-  }
+    while (!removeGenerator.next().done) {}
+  };
 
   this.iteRemove = function* (target) {
     let prev;
@@ -69,7 +67,10 @@ export function BinarySearchTree(waitFrame) {
         current = current.leftChild;
         isRightChild = false;
       } else {
-        if (current.leftChild === undefined || current.rightChild === undefined) {
+        if (
+          current.leftChild === undefined ||
+          current.rightChild === undefined
+        ) {
           replaceWithChild.call(this, current, prev, isRightChild);
           break;
         } else {
@@ -80,7 +81,7 @@ export function BinarySearchTree(waitFrame) {
         }
       }
     }
-  }
+  };
 
   function swapWithMinRightChild(current) {
     let replacementValue = findMinValue(current.rightChild);
@@ -88,8 +89,9 @@ export function BinarySearchTree(waitFrame) {
     return replacementValue;
   }
 
-   function replaceWithChild (current, prev, isRightChild) {
-    let replacement = current.leftChild === undefined ? current.rightChild : current.leftChild;
+  function replaceWithChild(current, prev, isRightChild) {
+    let replacement =
+      current.leftChild === undefined ? current.rightChild : current.leftChild;
     if (prev !== undefined) {
       if (isRightChild) {
         prev.rightChild = replacement;

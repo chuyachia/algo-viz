@@ -1,9 +1,9 @@
-import 'regenerator-runtime/runtime';
+import "regenerator-runtime/runtime";
 
-import { Vertex } from '../common/vertex';
-import { hierholzer } from './hierholzer';
+import { Vertex } from "../common/vertex";
+import { hierholzer } from "./hierholzer";
 
-test('Heirholzer when Eulerian path exists expect path found', () =>  {
+test("Heirholzer when Eulerian path exists expect path found", () => {
   const n = 5;
   const vertices = new Array(n);
   for (let i = 0; i < n; i++) {
@@ -20,14 +20,15 @@ test('Heirholzer when Eulerian path exists expect path found', () =>  {
   let state;
   {
     state = hs.next();
-  } while (!state.done);
+  }
+  while (!state.done);
 
   let res = state.value;
   let expected = [1, 0, 3, 4, 0, 2];
   expect(res).toEqual(expected);
-})
+});
 
-test('Heirholzer when disconnected graph expect false', () =>  {
+test("Heirholzer when disconnected graph expect false", () => {
   const n = 4;
   const vertices = new Array(n);
   for (let i = 0; i < n; i++) {
@@ -43,9 +44,10 @@ test('Heirholzer when disconnected graph expect false', () =>  {
   let state;
   {
     state = hs.next();
-  } while (!state.done);
+  }
+  while (!state.done);
 
   let res = state.value;
   let expected = false;
   expect(res).toEqual(expected);
-})
+});
