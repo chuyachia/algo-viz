@@ -21,15 +21,7 @@ export function sketch(p) {
   p.setup = function () {
     p.createCanvas(canvasWidth, canvasHeight);
     drawButton();
-    vertices = drawVertices(
-      p,
-      n,
-      canvasWidth,
-      canvasHeight,
-      radius,
-      vertexDiameter,
-      "?"
-    );
+    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, "?");
   };
 
   function drawButton() {
@@ -125,15 +117,7 @@ export function sketch(p) {
     vertices = [];
     topoSortSolver = undefined;
     mode = 0;
-    vertices = drawVertices(
-      p,
-      n,
-      canvasWidth,
-      canvasHeight,
-      radius,
-      vertexDiameter,
-      "?"
-    );
+    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, "?");
   }
 
   p.mouseReleased = function () {

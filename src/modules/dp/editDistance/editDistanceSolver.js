@@ -129,7 +129,6 @@ export function* solveEditDistance(
     }
   }
 
-  let res = [];
   let steps = [];
   let backTrackCell = grid[n - 1][m - 1];
 
@@ -140,35 +139,41 @@ export function* solveEditDistance(
   }
 
   // Reconstruct result string at each edit
-  let edit = [...fromCharArray];
-  edit.splice(0, 1);
-  let editDone = [];
-  res.push(edit.join(""));
+  let unchangedChars = [...fromCharArray];
+  unchangedChars.splice(0, 1);
+  let changedChars = [];
+  let stepStrings = [];
+  stepStrings.push(unchangedChars.join(""));
   let i = 0;
   let j = 0;
   for (let s of steps) {
     let ni = s[1];
     let nj = s[0];
-    if (ni === i + 1 && nj === j + 1) {
-      editDone.push(edit.splice(0, 1));
 
-      if (grid[ni][nj].value > grid[i][j].value) {
-        editDone[editDone.length - 1] = toCharArray[ni];
-        res.push(editDone.join("") + edit.join(""));
-      }
-    } else if (ni === i + 1) {
-      editDone.push(toCharArray[ni]);
-
-      res.push(editDone.join("") + edit.join(""));
-    } else {
-      editDone.push(edit.splice(0, 1));
-
-      editDone.splice(editDone.length - 1, 1);
-      res.push(editDone.join("") + edit.join(""));
+    // No edit needed
+    if (grid[ni][nj].value == grid[i][j].value) {
+      changedChars.push(unchangedChars.splice(0, 1));
+      i = ni;
+      j = nj;
+      continue;
     }
+
+    if (ni === i + 1 && nj === j + 1) {
+      // replace
+      unchangedChars.splice(0, 1);
+      changedChars.push(toCharArray[ni]);
+    } else if (ni === i + 1) {
+      // add
+      changedChars.push(toCharArray[ni]);
+    } else {
+      // remove
+      unchangedChars.splice(0, 1);
+    }
+
+    stepStrings.push(changedChars.join("") + unchangedChars.join(""));
     i = ni;
     j = nj;
   }
 
-  return res;
+  return stepStrings;
 }

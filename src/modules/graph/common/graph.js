@@ -6,7 +6,6 @@ export function drawVertices(
   canvasWidth,
   canvasHeight,
   graphRadius,
-  vertexDiameter,
   vertexRenderDisplayValue
 ) {
   const vertices = [];

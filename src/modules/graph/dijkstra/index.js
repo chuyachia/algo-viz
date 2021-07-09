@@ -21,15 +21,7 @@ export function sketch(p) {
   p.setup = function () {
     p.createCanvas(canvasWidth, canvasHeight);
     drawButton();
-    vertices = drawVertices(
-      p,
-      n,
-      canvasWidth,
-      canvasHeight,
-      radius,
-      vertexDiameter,
-      "Inf"
-    );
+    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, "Inf");
   };
 
   function drawButton() {
@@ -126,15 +118,7 @@ export function sketch(p) {
     startVertex = undefined;
     dSolver = undefined;
     mode = 0;
-    vertices = drawVertices(
-      p,
-      n,
-      canvasWidth,
-      canvasHeight,
-      radius,
-      vertexDiameter,
-      "Inf"
-    );
+    vertices = drawVertices(p, n, canvasWidth, canvasHeight, radius, "Inf");
   }
 
   p.mouseClicked = function () {
