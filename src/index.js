@@ -43,6 +43,9 @@ import "./assets/index.css";
         case "avl":
           await dynamicLoadModule("tree/avlTree");
           break;
+        case "b-plus-tree":
+          await dynamicLoadModule("tree/bPlusTree");
+          break;
         case "edit-distance":
           await dynamicLoadModule("dp/editDistance");
           break;

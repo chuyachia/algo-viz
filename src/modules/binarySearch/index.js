@@ -29,6 +29,7 @@ export function sketch(p) {
     inputElement = p.createInput("");
     inputElement.attribute("placeholder", "Enter number");
     inputElement.position(startX, 40);
+    inputElement.elt.addEventListener("keypress", insertNode);
   };
 
   p.draw = function () {
@@ -66,11 +67,11 @@ export function sketch(p) {
     }
   };
 
-  p.keyReleased = function () {
-    if (p.keyCode === p.ENTER) {
+  function insertNode(e) {
+    if (e.keyCode === p.ENTER) {
       validateInputAndInsertNode();
     }
-  };
+  }
 
   /**
    *

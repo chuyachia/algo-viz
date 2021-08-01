@@ -41,7 +41,6 @@ export function sketch(p) {
       }
     } else if (mode == 1) {
       let state = hierholzerSolver.next();
-      console.log(state);
       if (state.done) {
         mode = 2;
         pathExists = state.value;

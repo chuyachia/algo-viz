@@ -19,6 +19,7 @@ export function sketch(p) {
     inputElement.attribute("placeholder", "Enter string");
     inputElement.attribute("maxLength", "8");
     inputElement.position(10, 40);
+    inputElement.elt.addEventListener("keypress", handleEnterKey);
     button = p.createButton("Restart");
     button.position(10, 40);
     button.addClass("action-button");
@@ -72,8 +73,8 @@ export function sketch(p) {
     gridElement.display(p);
   };
 
-  p.keyPressed = function () {
-    if (p.keyCode === p.ENTER) {
+  function handleEnterKey(e) {
+    if (e.keyCode === p.ENTER) {
       if (state === 0) {
         fromCharArray = inputElement.value().split("");
         fromCharArray.unshift("");
@@ -95,7 +96,7 @@ export function sketch(p) {
         state = 2;
       }
     }
-  };
+  }
 }
 
 export const explainText = "";

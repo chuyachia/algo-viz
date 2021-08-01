@@ -20,6 +20,8 @@ export function createTreeSketch(tree) {
       inputElement = p.createInput("");
       inputElement.attribute("placeholder", "Enter number");
       inputElement.position(10, 40);
+      inputElement.elt.addEventListener("keypress", insertNode);
+
       let inOrderButton = p.createButton("Inorder");
       inOrderButton.position(10, 80);
       inOrderButton.mousePressed(inOrderTraverse);
@@ -64,15 +66,15 @@ export function createTreeSketch(tree) {
       }
     };
 
-    p.keyReleased = function () {
+    function insertNode(e) {
       if (animationPlaying) {
         return;
       }
 
-      if (p.keyCode === p.ENTER) {
+      if (e.keyCode === p.ENTER) {
         validateInputAndInsertNode();
       }
-    };
+    }
 
     p.mousePressed = function () {
       if (animationPlaying) {
