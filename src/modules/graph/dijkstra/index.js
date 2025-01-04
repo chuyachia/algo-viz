@@ -38,7 +38,7 @@ export function sketch(p) {
     if (mode === 0) {
       if (pendingEdge !== undefined) {
         if (p.mouseIsPressed) {
-          pendingEdge.increaseWeight();
+          pendingEdge.increaseWeight(p);
         }
         pendingEdge.display(p);
       }

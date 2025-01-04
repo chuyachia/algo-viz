@@ -3,7 +3,7 @@ import { GREY } from "../../util/colors";
 export function GrowingEdge(fromX, fromY) {
   this.weight = 1;
 
-  this.increaseWeight = function () {
+  this.increaseWeight = function (p) {
     this.weight += 1 / p.deltaTime;
     this.weight = this.weight % 10;
   };

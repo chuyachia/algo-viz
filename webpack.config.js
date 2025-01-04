@@ -21,7 +21,7 @@ module.exports = (env) => ({
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
-    contentBase: './dist',
+    static: './dist',
   },
   module: {
     rules: [
